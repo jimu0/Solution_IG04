@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardCore_IG04", "CardCore_IG04\CardCore_IG04.csproj", "{7C9FA33E-0FED-4A4F-9558-EA963D272E18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mycelia", "Mycelia\Mycelia.csproj", "{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C9FA33E-0FED-4A4F-9558-EA963D272E18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9FA33E-0FED-4A4F-9558-EA963D272E18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9FA33E-0FED-4A4F-9558-EA963D272E18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9FA33E-0FED-4A4F-9558-EA963D272E18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal
