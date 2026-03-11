@@ -95,7 +95,7 @@ namespace IGC.CardCore_IG04.Luban
 
         public int WriterIndex { get; set; }
 
-        private readonly Action<ByteBuf> _releaser;
+        private readonly Action<ByteBuf>? _releaser;
 
         public int Capacity => Bytes.Length;
 
@@ -1025,20 +1025,20 @@ namespace IGC.CardCore_IG04.Luban
             return ((long)((ulong)x >> 1) ^ ((x & 1) << 63));
         }
 
-        public void WriteString(string x)
+        public void WriteString(string? x)
         {
             var n = x != null ? Encoding.UTF8.GetByteCount(x) : 0;
             WriteSize(n);
             if (n > 0)
             {
                 EnsureWrite(n);
-                Encoding.UTF8.GetBytes(x, 0, x.Length, Bytes, WriterIndex);
+                Encoding.UTF8.GetBytes(x, 0, x!.Length, Bytes, WriterIndex);
                 WriterIndex += n;
             }
         }
 
         // byte[], [start, end)
-        public static Func<byte[], int, int, string> StringCacheFinder { get; set; }
+        public static Func<byte[], int, int, string>? StringCacheFinder { get; set; }
 
         public string ReadString()
         {
@@ -1066,14 +1066,14 @@ namespace IGC.CardCore_IG04.Luban
             }
         }
 
-        public void WriteBytes(byte[] x)
+        public void WriteBytes(byte[]? x)
         {
-            var n = x != null ? x.Length : 0;
+            var n = x?.Length ?? 0;
             WriteSize(n);
             if (n > 0)
             {
                 EnsureWrite(n);
-                x.CopyTo(Bytes, WriterIndex);
+                x?.CopyTo(Bytes, WriterIndex);
                 WriterIndex += n;
             }
         }
