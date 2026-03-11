@@ -300,7 +300,7 @@ namespace SimpleJSON
         #endregion Guid
 
         #region ByteArray
-        public virtual byte[]? AsByteArray
+        public virtual byte[] AsByteArray
         {
             get
             {
@@ -309,7 +309,7 @@ namespace SimpleJSON
                 int count = Count;
                 byte[] result = new byte[count];
                 for (int i = 0; i < count; i++)
-                    result[i] = this[i]!.AsByte;
+                    result[i] = this[i].AsByte;
                 return result;
             }
             set
@@ -327,13 +327,13 @@ namespace SimpleJSON
             return new JSONArray { AsByteArray = aByteArray };
         }
 
-        public static implicit operator byte[]?(JSONNode aNode)
+        public static implicit operator byte[](JSONNode aNode)
         {
             return aNode.AsByteArray;
         }
         #endregion ByteArray
         #region ByteList
-        public virtual List<byte>? AsByteList
+        public virtual List<byte> AsByteList
         {
             get
             {
@@ -342,7 +342,7 @@ namespace SimpleJSON
                 int count = Count;
                 List<byte> result = new List<byte>(count);
                 for (int i = 0; i < count; i++)
-                    result.Add(this[i]!.AsByte);
+                    result.Add(this[i].AsByte);
                 return result;
             }
             set
@@ -360,14 +360,14 @@ namespace SimpleJSON
             return new JSONArray { AsByteList = aByteList };
         }
 
-        public static implicit operator List<byte>? (JSONNode aNode)
+        public static implicit operator List<byte> (JSONNode aNode)
         {
             return aNode.AsByteList;
         }
         #endregion ByteList
 
         #region StringArray
-        public virtual string[]? AsStringArray
+        public virtual string[] AsStringArray
         {
             get
             {
@@ -376,7 +376,7 @@ namespace SimpleJSON
                 int count = Count;
                 string[] result = new string[count];
                 for (int i = 0; i < count; i++)
-                    result[i] = this[i]!.Value;
+                    result[i] = this[i].Value;
                 return result;
             }
             set
@@ -394,13 +394,13 @@ namespace SimpleJSON
             return new JSONArray { AsStringArray = aStringArray };
         }
 
-        public static implicit operator string[]? (JSONNode aNode)
+        public static implicit operator string[] (JSONNode aNode)
         {
             return aNode.AsStringArray;
         }
         #endregion StringArray
         #region StringList
-        public virtual List<string>? AsStringList
+        public virtual List<string> AsStringList
         {
             get
             {
@@ -409,7 +409,7 @@ namespace SimpleJSON
                 int count = Count;
                 List<string> result = new List<string>(count);
                 for (int i = 0; i < count; i++)
-                    result.Add(this[i]!.Value);
+                    result.Add(this[i].Value);
                 return result;
             }
             set
@@ -427,7 +427,7 @@ namespace SimpleJSON
             return new JSONArray { AsStringList = aStringList };
         }
 
-        public static implicit operator List<string>? (JSONNode aNode)
+        public static implicit operator List<string> (JSONNode aNode)
         {
             return aNode.AsStringList;
         }
@@ -440,7 +440,7 @@ namespace SimpleJSON
                 return JSONNull.CreateOrGet();
             return new JSONNumber((int)aValue);
         }
-        public static implicit operator int?(JSONNode? aNode)
+        public static implicit operator int?(JSONNode aNode)
         {
             if (aNode == null || aNode.IsNull)
                 return null;
