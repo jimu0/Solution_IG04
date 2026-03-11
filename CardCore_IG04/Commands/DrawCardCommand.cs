@@ -1,3 +1,4 @@
+
 namespace IGC.CardCore_IG04;
 
 //抽牌指令
@@ -12,11 +13,7 @@ public class DrawCardCommand
 
     public void Execute(GameContext context)
     {
-        Card? card = context.Deck.DrawTop();
-        if (card == null)
-            return;
-
-        context.MoveCard(card, context.Deck, _player.Hand);
-        context.Events.Publish(new CardDrawnEvent(_player, card));
+        int cardId = context.cardBoard.Deck.DrawTop();
+        if (cardId != 0) context.MoveCard(cardId, context.cardBoard.Deck, _player.Hand);
     }
 }

@@ -4,19 +4,19 @@ namespace IGC.CardCore_IG04;
 //移动命令
 public class MoveCardCommand
 {
-    private Card _card;
+    private int _cardId;
     private CardZone _from;
     private CardZone _to;
 
-    public MoveCardCommand(Card card, CardZone from, CardZone to)
+    public MoveCardCommand(int cardId, CardZone from, CardZone to)
     {
-        _card = card;
+        _cardId = cardId;
         _from = from;
         _to = to;
     }
 
     public void Execute(GameContext context)
     {
-        context.MoveCard(_card, _from, _to);
+        context.MoveCard(_cardId, _from, _to);
     }
 }

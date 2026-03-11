@@ -3,11 +3,11 @@ namespace IGC.CardCore_IG04;
 public class CardPlayedEvent
 {
     public Player Player { get; }
-    public Card Card { get; }
+    public int CardId;
 
-    public CardPlayedEvent(Player player, Card card)
+    public CardPlayedEvent(Player player, int cardId)
     {
         Player = player;
-        Card = card;
+        CardId = cardId;
     }
 }

@@ -2,10 +2,13 @@ namespace IGC.CardCore_IG04;
 
 public class Player
 {
-    public int Id { get; }
-    public CardZone Hand = new();
-    public Player(int id)
+    public readonly int Id;
+    public readonly CardZone Hand;
+
+    public Player(int i,CardBoard cardBoard)
     {
-        Id = id;
+        Id = i;
+        Hand = cardBoard.PlayerHands[i];
+        //else Hand = new CardZone((ZoneType)(4+i));
     }
 }

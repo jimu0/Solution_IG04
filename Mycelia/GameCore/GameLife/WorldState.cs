@@ -18,7 +18,7 @@ public struct WorldState
         public double muDynamic;
     }
     
-    SurfaceSegment[] surfaceSegments;
+    //SurfaceSegment[] surfaceSegments;
 
     public void Advance()
     {

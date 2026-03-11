@@ -2,14 +2,21 @@ namespace IGC.CardCore_IG04;
 
 public class Card
 {
-    public Guid InstanceId { get; }
-    public CardDefinition Definition { get; }
+    public int runtimeId;
+    public CardDefinition definition = new CardDefinition();
+    public List<int> runtimeEffects = new List<int>();
     
-    public List<ICardEffect> Effects { get; } = new();
-    
-    public Card(CardDefinition definition)
-    {
-        InstanceId = Guid.NewGuid();
-        Definition = definition;
-    }
+
+    // public Card()
+    // {
+    //     runtimeId = GameContext.;
+    //     currentState = new CardCurrentState();
+    // }
+    //
+    // public Card(CardCurrentState currentState)
+    // {
+    //     guid = Guid.NewGuid();
+    //     this.currentState = currentState;
+    // }
+
 }

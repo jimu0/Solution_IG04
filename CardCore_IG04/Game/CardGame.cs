@@ -5,11 +5,11 @@ namespace IGC.CardCore_IG04;
 
 public class CardGame : ISim
 {
-    public GameContext Context { get; }
+    private GameContext Context { get; }
     public GamePhase Phase { get; private set; }
 
-    private Queue<IGameCommand> _commandQueue = new();
-    private SimPhase phase;
+    private readonly Queue<IGameCommand> _commandQueue = new();
+    private readonly SimPhase phase = SimPhase.PostStep;
 
     public CardGame(GameContext context)
     {
@@ -76,10 +76,10 @@ public class CardGame : ISim
     /// </summary>
     private void HandlePlayerTurn()
     {
-        var currentPlayer = Context.CurrentPlayer;
+        var currentPlayerId = Context.currentPlayerIndex;
 
         // 如果当前玩家无法行动（比如手牌为空）
-        if (!CanPlayerAct(currentPlayer))
+        if (!CanPlayerAct(currentPlayerId))
         {
             Phase = GamePhase.TriggerEffect;
             return;
@@ -92,9 +92,9 @@ public class CardGame : ISim
         }
     }
     
-    private bool CanPlayerAct(Player player)
+    private bool CanPlayerAct(int currentPlayerId)
     {
-        return player.Hand.Cards.Count > 0;
+        return Context.cardBoard.PlayerHands[currentPlayerId].cardIds.Count > 0;
     }
 
     private void ResolveCommands()
@@ -119,5 +119,6 @@ public class CardGame : ISim
     public void OnSimStep(in Input input, ref WorldState state)
     {
         //throw new NotImplementedException();
+        Update();
     }
 }

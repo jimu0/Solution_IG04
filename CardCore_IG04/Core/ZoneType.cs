@@ -2,9 +2,12 @@ namespace IGC.CardCore_IG04;
 
 public enum ZoneType
 {
-    Deck,
-    Hand,
-    Discard,
     PlayArea,
-    Enemy
+    Deck,
+    Discard,
+    Enemy,
+    Player1Hand,
+    Player2Hand,
+    player3Hand,
+    player4Hand
 }
