@@ -20,10 +20,13 @@ public class GameContext
         {
             cardBoard.PlayerHands.Add(new CardZone((ZoneType)(4 + i)));
         }
+
+        CurrentPlayer = new Player(0, cardBoard);
     }
     
     public List<Card?> gameCards;
     public List<int> boardCards;
+    
     private int _nextCardId = 1;
     /// <summary>
     /// 生成器
@@ -32,14 +35,8 @@ public class GameContext
     public int AllocateCardId(){return _nextCardId++;}
     
     public CardBoard cardBoard = new CardBoard();
-    // public CardZone PlayArea { get; }//桌面区
-    // public CardZone Deck { get; }//发牌区
-    // public CardZone Discard { get; }//弃牌区
-    // public CardZone Enemy { get; }//敌对区
-    // public List<Player> Players { get; }//选手区
-    // public int NumberOfPlayers { get; set; }//玩家数
     public int currentPlayerIndex { get; set; }//当前玩家序号
-    //public Player CurrentPlayer => Players[CurrentPlayerIndex];//当前玩家
+    public Player CurrentPlayer;//当前玩家
     
     
     public EventBus Events { get; } = new();
@@ -53,8 +50,6 @@ public class GameContext
     }
 
     public event Action<int,CardZone, CardZone>? OnCardMoved;
-
-    //public GameState GameState = new GameState();
     
     
 

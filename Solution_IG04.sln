@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardCore_IG04", "CardCore_I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mycelia", "Mycelia\Mycelia.csproj", "{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPGCore_IG04", "RPGCore_IG04\RPGCore_IG04.csproj", "{61F1F56B-4AAA-48B3-B684-E6F179001227}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,10 @@ Global
 		{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{004FF1F6-18D9-4137-8E9F-CBAB9CA6FF55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61F1F56B-4AAA-48B3-B684-E6F179001227}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61F1F56B-4AAA-48B3-B684-E6F179001227}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61F1F56B-4AAA-48B3-B684-E6F179001227}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61F1F56B-4AAA-48B3-B684-E6F179001227}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

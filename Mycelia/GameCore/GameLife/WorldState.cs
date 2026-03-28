@@ -3,7 +3,8 @@ namespace Mycelia;
 
 public struct WorldState
 {
-    public int tick;
+    
+    public double tick;
     public string debugText;
 
     public int worldWidth;
@@ -38,14 +39,21 @@ public struct WorldState
         public TileFlags flags;
     }
     
-    public struct WalkerState
-    {
-        public double p;
-        public double speed;
-    }
+    // public struct WalkerState
+    // {
+    //     public double p;
+    //     public double speed;
+    // }
 
-    public WalkerState[] walkerStates;
+    public struct PawnState
+    {
+        public Tsf2 tsf;
+        public ActionBits action;
+    }
+    
+    //public WalkerState[] walkerStates;
     public unitState[] unitStates;
+    public PawnState[] pawnStates;
     // public unitState playerState;
     // public unitState[] totemsState;
     // public unitState[] CardStates;

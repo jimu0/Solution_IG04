@@ -7,5 +7,5 @@ public class CardBoard
     public CardZone Deck = new(ZoneType.Deck);
     public CardZone Discard = new(ZoneType.Discard);
     public CardZone Enemy = new(ZoneType.Enemy);
-    public List<CardZone> PlayerHands = new();
+    public List<CardZone> PlayerHands = new(); 
 }

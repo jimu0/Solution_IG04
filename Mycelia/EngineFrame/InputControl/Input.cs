@@ -18,6 +18,11 @@ public enum ActionBits
     Confirm = 1 << 0,
     Cancel  = 1 << 1,
     Use     = 1 << 2,
-    //Jump   = 1 << 3,
-    //Attack = 1 << 4,
+    Skill1 = 1 << 3,
+    Skill2 = 1 << 4,
+    Skill3 = 1 << 5,
+    Skill4 = 1 << 6,
+    Skill5 = 1 << 7,
 }
+
+

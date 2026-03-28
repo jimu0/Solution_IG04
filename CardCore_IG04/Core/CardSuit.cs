@@ -1,5 +1,4 @@
 using System.ComponentModel;
-
 namespace IGC.CardCore_IG04;
 
 public enum CardSuit
