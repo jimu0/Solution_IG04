@@ -8,6 +8,7 @@ public struct Input
     public int tick;
     public Vec3 move;
     public Vec3 aim;
+    public bool aiming;
     public ActionBits action;
 }
 
@@ -23,6 +24,7 @@ public enum ActionBits
     Skill3 = 1 << 5,
     Skill4 = 1 << 6,
     Skill5 = 1 << 7,
+    Skill6 = 1 << 8,
 }
 
 

@@ -2,31 +2,38 @@ namespace Mycelia;
 public struct Tsf2
 {
     public Vec2 postion;
-    public Vec2 rotation;
+    public Vec2 direction;
     public Vec2 scale;
     public float z;
     public Tsf2()
     {
         postion = Vec2.Zero;
-        rotation = Vec2.Zero;
+        direction = Vec2.Zero;
         scale = Vec2.One;
         z = 0;
     }
-    public Tsf2(Vec2 p,Vec2 r,Vec2 s)
+    public Tsf2(Vec2 p,Vec2 d)
     {
         postion = p;
-        rotation = r;
+        direction = d;
+        scale = Vec2.One;
+        z = 0;
+    }
+    public Tsf2(Vec2 p,Vec2 d,Vec2 s)
+    {
+        postion = p;
+        direction = d;
         scale = s;
         z = 0;
     }
-    public Tsf2(Vec2 p,Vec2 r,Vec2 s,float z)
+    public Tsf2(Vec2 p,Vec2 d,Vec2 s,float z)
     {
         postion = p;
-        rotation = r;
+        direction = d;
         scale = s;
         this.z = z;
     }
     
     // 常量
-    public static Tsf2 Zero => new Tsf2(Vec2.Zero, Vec2.Zero, Vec2.One, 0);
+    public static Tsf2 Zero => new Tsf2(Vec2.Zero, Vec2.Up, Vec2.One, 0);
 }

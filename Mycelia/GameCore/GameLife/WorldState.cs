@@ -1,4 +1,4 @@
-
+//游戏世界的所有状态
 namespace Mycelia;
 
 public struct WorldState
@@ -58,4 +58,6 @@ public struct WorldState
     // public unitState[] totemsState;
     // public unitState[] CardStates;
     // public unitState[] othersState;
+
+    public cameraStand cameraStand;
 }
