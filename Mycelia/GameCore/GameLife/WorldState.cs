@@ -12,14 +12,6 @@ public struct WorldState
     public TileState[] tiles;
 
     public double length;
-    struct SurfaceSegment
-    {
-        public double startS;
-        public double muStatic;
-        public double muDynamic;
-    }
-    
-    //SurfaceSegment[] surfaceSegments;
 
     public void Advance()
     {
@@ -38,12 +30,6 @@ public struct WorldState
         public float height;
         public TileFlags flags;
     }
-    
-    // public struct WalkerState
-    // {
-    //     public double p;
-    //     public double speed;
-    // }
 
     public struct PawnState
     {
@@ -51,13 +37,8 @@ public struct WorldState
         public ActionBits action;
     }
     
-    //public WalkerState[] walkerStates;
     public unitState[] unitStates;
     public PawnState[] pawnStates;
-    // public unitState playerState;
-    // public unitState[] totemsState;
-    // public unitState[] CardStates;
-    // public unitState[] othersState;
 
-    public cameraStand cameraStand;
+    public CameraStand cameraStand;
 }

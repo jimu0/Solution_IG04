@@ -2,7 +2,16 @@ namespace Mycelia;
 
 public enum SimPhase
 {
-    PreStep,   // 输入、准备、感知
-    Step,      // 核心规则推进
-    PostStep   // 派生数据、事件、观察
+    /// <summary>
+    /// 每Tick时间开始时推进
+    /// </summary>
+    PreStep,
+    /// <summary>
+    /// 每游戏时间帧推进
+    /// </summary>
+    Step,
+    /// <summary>
+    /// 每Tick时间结束时推进
+    /// </summary>
+    PostStep
 }

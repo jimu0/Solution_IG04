@@ -3,6 +3,6 @@ namespace Mycelia;
 
 public struct ViewportState
 {
-    public cameraStand mainCameraStand;
+    public CameraStand mainCameraStand;
     
 }

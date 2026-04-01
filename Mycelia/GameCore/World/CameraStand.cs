@@ -1,16 +1,16 @@
 namespace Mycelia;
 
-public class cameraStand
+public class CameraStand
 {
     public Vec3 follow;
     public Vec3 lookAt;
 
-    public cameraStand()
+    public CameraStand()
     {
         follow = Vec3.Back;
         lookAt = Vec3.Zero;
     }
-    public cameraStand(Vec3 follow, Vec3 lookAt)
+    public CameraStand(Vec3 follow, Vec3 lookAt)
     {
         this.follow = follow;
         this.lookAt = lookAt;
@@ -22,7 +22,7 @@ public class cameraStand
         lookAt = pos1;
     }
 
-    public void SetCameraStandState(cameraStand stand,ref WorldState state)
+    public void SetCameraStandState(CameraStand stand,ref WorldState state)
     {
         state.cameraStand = stand;
     }
