@@ -20,7 +20,7 @@ internal static class Simulate
         _currentTick = 0;
         _systems.Clear();
         _byPhase.Clear();
-        _state.tiles = System.Array.Empty<WorldState.TileState>();
+        //_state.tiles = System.Array.Empty<WorldState.TileState>();
 
         BatchRegister(systems);
     }
@@ -30,13 +30,25 @@ internal static class Simulate
         foreach (var sys in _systems) sys.OnSimStart(_input, ref _state);
     }
 
-    internal static void Tick()
+    internal static void Tick(Input input, out WorldState state, out bool stepped)
     {
-        if (!WTime.Tick()) return;
-        RunPhase(SimPhase.PreStep);
-        int steps = WTime.Advance();
-        for (int i = 0; i < steps; i++) Step();
-        RunPhase(SimPhase.PostStep);
+        _input = input;
+        stepped = false;
+
+        // 每帧采样一次，然后从累加器中取出固定数量的步骤进行处理。
+        WTime.Sampling();//从真实世界采样一次时间
+        if (WTime.ShouldStep(WTime.fixedDt))
+        {
+            RunPhase(SimPhase.PreStep);
+            while (WTime.ShouldStep(WTime.fixedDt))
+            {
+                WTime.ConsumeStep(WTime.fixedDt);//消耗一次固定步时间
+                Step();
+                stepped = true;
+            }
+            RunPhase(SimPhase.PostStep);
+        }
+        state = _state;
     }
 
     private static void Step()
@@ -52,14 +64,7 @@ internal static class Simulate
         foreach (var sys in list) sys.OnSimStep(_input, ref _state);
     }
 
-    internal static void PushInput(Input input)
-    {
-        _input = input; // input freezes at tick boundary
-    }
-
-    internal static WorldState GetWorldState() => _state;
-
-    private static void Register(ISim sys)
+    private static void Register(ISim? sys)
     {
         if (sys == null) return;
 
@@ -76,9 +81,9 @@ internal static class Simulate
 
     private static void BatchRegister(IReadOnlyList<ISim> systems)
     {
-        for (int i = 0; i < systems.Count; i++)
+        foreach (ISim t in systems)
         {
-            Register(systems[i]);
+            Register(t);
         }
     }
 }

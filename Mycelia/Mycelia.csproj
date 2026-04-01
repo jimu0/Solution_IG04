@@ -9,4 +9,8 @@
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="EngineFrame\Physics\" />
+    </ItemGroup>
+
 </Project>

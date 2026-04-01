@@ -27,15 +27,7 @@ public static class WTime
         lastTime = now;
         accum += frameTime;
     }
-
-    /// <summary>
-    /// 从真实世界采样一次时间并
-    /// </summary>
-    public static bool Tick()
-    {
-        Sampling();
-        return ShouldStep(fixedDt);
-    }
+    
 
     /// <summary>
     /// 是否执行一次固定步模拟

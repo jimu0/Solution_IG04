@@ -13,11 +13,11 @@ internal static class Config
     
     internal static UnitConfig GetUnitConfig(int id)
     {
-        return _config?.GetUnit(id) ?? throw new Exception("在使用配置文件之前，必须先调用 Igc.InitTables 方法.");
+        return _config?.GetUnit(id) ?? throw new Exception("在使用配置文件之前，必须先调用 MC.InitTables 方法.");
     }
     
     internal static CardConfig GetCardConfig(int id)
     {
-        return _config?.GetCard(id) ?? throw new Exception("在使用配置文件之前，必须先调用 Igc.InitTables 方法.");
+        return _config?.GetCard(id) ?? throw new Exception("在使用配置文件之前，必须先调用 MC.InitTables 方法.");
     }
 }

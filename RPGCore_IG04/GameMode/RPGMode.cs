@@ -7,7 +7,7 @@ public class RPGMode: ISim
     internal double tick;
 
     public GameControls gameControls = new ();
-    public cameraStand mainCameraStand = new ();
+    //public cameraStand mainCameraStand = new ();
     
     
     public SimPhase Phase => SimPhase.Step;
@@ -22,6 +22,6 @@ public class RPGMode: ISim
         tick++;
         state.tick = tick;
         gameControls.PawnMove(input, ref state);
-        mainCameraStand.SetCameraStandState(new cameraStand(), ref state);//TODO:每帧传入正确主镜头位置
+        //mainCameraStand.SetCameraStandState(new cameraStand(), ref state);
     }
 }
