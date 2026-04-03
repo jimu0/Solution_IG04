@@ -1,7 +1,7 @@
 
 namespace Mycelia;
 
-internal class Unit : Un
+public partial class Unit : Un
 {
     internal Vec3 position = Vec3.Back;
     internal Vec3 orientation = Vec3.Front;
