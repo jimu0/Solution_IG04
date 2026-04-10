@@ -1,16 +1,16 @@
 namespace Mycelia.Collision.AABB;
 
-public class CollisionSystem
+public static class CollisionSystem
 {
-    private readonly List<Collider> _colliders = new();
+    private static readonly List<Collider> _colliders = new();
 
     // 用于事件检测
-    private readonly HashSet<(Collider, Collider)> _lastFrame = new();
+    private static readonly HashSet<(Collider, Collider)> _lastFrame = new();
 
-    public void Add(Collider c) => _colliders.Add(c);
-    public void Remove(Collider c) => _colliders.Remove(c);
+    public static void Add(Collider c) => _colliders.Add(c);
+    public static void Remove(Collider c) => _colliders.Remove(c);
 
-    public void Step()
+    public static void Step()
     {
         HashSet<(Collider, Collider)> currentFrame = new();
 
@@ -60,11 +60,10 @@ public class CollisionSystem
         }
 
         _lastFrame.Clear();
-        foreach (var p in currentFrame)
-            _lastFrame.Add(p);
+        foreach (var p in currentFrame) _lastFrame.Add(p);
     }
 
-    private void Resolve(Collider a, Collider b)
+    private static void Resolve(Collider a, Collider b)
     {
         var m = AABBResolver.Resolve(a.bounds, b.bounds);
         if (!m.isColliding) return;
@@ -88,4 +87,5 @@ public class CollisionSystem
             b.bounds.position -= separation * 0.5f;
         }
     }
+    
 }

@@ -1,7 +1,7 @@
 
 namespace Mycelia;
 //图腾，基础设备类
-internal class Totem : Unit, IPulseNode
+internal class Totem : UObj, IPulseNode
 {
     
     internal float hp = 1; //生命
@@ -15,6 +15,7 @@ internal class Totem : Unit, IPulseNode
     internal readonly IPulseNode?[] targets = new IPulseNode[8]; //8个儿子
     //public int childCount = 0;
     //public Action skill=new Action(_ => _); //能力
+
     public float Cost => 1;//mp < consume ? float.PositiveInfinity : consume;
     public IPulseNode?[] Targets => targets;
 

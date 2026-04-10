@@ -1,7 +1,8 @@
+//可被分类
 namespace Mycelia;
 
-public partial class Unit:Un
+public class Unit : Un
 {
-    private string tag = Tags.tags[0];
+    public string tag = Tags.tags[0];
     public string layer = Layer.layer[0];
 }

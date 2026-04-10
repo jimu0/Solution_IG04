@@ -16,4 +16,11 @@ public struct AABB
         position.x + size.x * 0.5f,
         position.y + size.y * 0.5f
     );
+
+    public AABB(Vec2 pos,Vec2 size)
+    {
+        position = pos;
+        this.size = size;
+    }
+    
 }

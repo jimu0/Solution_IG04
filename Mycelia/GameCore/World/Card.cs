@@ -1,6 +1,6 @@
 namespace Mycelia;
 
-internal class Card : Prop
+internal class Card : Unit
 {
     internal int CollectionLocal = 0;
     internal int CollectionGlobal = 0;

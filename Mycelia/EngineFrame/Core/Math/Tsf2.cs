@@ -1,10 +1,11 @@
+
 namespace Mycelia;
 public struct Tsf2
 {
     public Vec2 postion;
     public Vec2 direction;
     public Vec2 scale;
-    public float z;
+    public float z;//用规则表达空间
     public Tsf2()
     {
         postion = Vec2.Zero;
