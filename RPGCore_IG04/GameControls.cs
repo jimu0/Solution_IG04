@@ -11,7 +11,7 @@ public class GameControls
     
     public void PawnMove(in Input input, ref WorldState state)
     {
-        state.pawnStates[0].tsf = newTsf;
+        state.roleStates[0].tsf = newTsf;
         
         float datatime = (float)WTime.fixedDt;
         Vec2 pos = newTsf.postion;
@@ -30,8 +30,8 @@ public class GameControls
             newTsf.direction.y = input.move.z;
         }
         
-        state.pawnStates[0].tsf = newTsf;
-        state.pawnStates[0].action = input.action;
+        state.roleStates[0].tsf = newTsf;
+        state.roleStates[0].action = input.action;
     }
 
 }

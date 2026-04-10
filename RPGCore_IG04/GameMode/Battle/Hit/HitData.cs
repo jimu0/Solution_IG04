@@ -32,7 +32,7 @@ public struct HitData
     public float time;         // 发生时间（或延迟）
 
     // === 扩展字段（非常关键）===
-    public object userData;    // 技能自定义数据
+    public object? userData;    // 技能自定义数据
 
     // === 构造 ===
     public static HitData Create(int attackerId, int targetId, int damage)

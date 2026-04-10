@@ -8,12 +8,13 @@ namespace IGC.RPGCore_IG04;
 public class Role : Pawn
 {
 
-    public float MaxArmor = 125;
-    public float armor = 50;
-    public int weaponId = 0;
-    public static AABB bounds = new(Vec2.One - Vec2.One * 0.5f, Vec2.One);
-    public Collider collider = new(bounds);
-
+    public float MaxArmor;
+    public float armor;
+    public int weaponId;
+    public static AABB bounds;
+    public Collider collider;
+    public bool isCollided = false;
+    
     // internal struct ItemStack
     // {
     //     public int itemId;
@@ -23,6 +24,16 @@ public class Role : Pawn
 
     //internal int weaponId;
     
+    public Role()
+    {
+        MaxHp = 100;
+        hp = 100;
+        MaxArmor = 125;
+        armor = 50;
+        weaponId = 0;
+        bounds = new AABB(Vec2.One * 0.5f, Vec2.One * 0.5f);
+        collider = new Collider(bounds, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
+    }
 
     public void Attack(int targetId)
     {
@@ -35,8 +46,19 @@ public class Role : Pawn
         
     }
 
-    private void pengzhuang()
+    public void ColliderOnEnter(Collider other)
     {
-
+        //var aa = other.userData == this.collider.userData;
     }
+
+    public void ColliderOnStay(Collider other)
+    {
+        isCollided = true;
+    }
+
+    public void ColliderOnExit(Collider other)
+    {
+        isCollided = false;
+    }
+    
 }

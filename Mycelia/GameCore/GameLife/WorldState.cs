@@ -39,6 +39,7 @@ public struct WorldState
     
     public unitState[] unitStates;
     public PawnState[] pawnStates;
-
+    public PawnState[] roleStates;
+    
     public CameraStand cameraStand;
 }
