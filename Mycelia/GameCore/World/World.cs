@@ -2,7 +2,7 @@
 
 namespace Mycelia;
 
-internal sealed class World
+internal sealed class World : Un
 {
     //private readonly List<Region> _regions;
     //internal List<Region> regions => _regions;

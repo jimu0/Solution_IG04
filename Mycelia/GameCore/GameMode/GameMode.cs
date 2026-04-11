@@ -12,8 +12,8 @@ internal class GameMode : ISim
     
     internal readonly Totem[] Totems = new Totem[81];
     internal readonly Card[] Cards = new Card[56];
-    internal readonly Unit[] Units = new Unit[137];
-    internal Player player => Totems[0] as Player ?? new Player();
+    internal readonly UObj[] Units = new UObj[137];
+    //internal Player player => Totems[0] as Player ?? new Player();
     
     /*
     //private static readonly int[] TotemClassAIds = { 0 };
@@ -36,9 +36,9 @@ internal class GameMode : ISim
             Totems[i] = new Totem
             {
                 id = totenTableId,
-                position = Config.GetUnitConfig(totenTableId).position,
-                orientation = Config.GetUnitConfig(totenTableId).orientation,
-                scale =  Config.GetUnitConfig(totenTableId).scale
+                // position = Config.GetUnitConfig(totenTableId).position,
+                // orientation = Config.GetUnitConfig(totenTableId).orientation,
+                // scale =  Config.GetUnitConfig(totenTableId).scale
             };
         }
         for (int j = 0; j < 9; j++)
@@ -82,26 +82,26 @@ internal class GameMode : ISim
         //for (int i = 0; i < settings.unitsCount; i++) Units.Add(unit);
         int index = 0;
         foreach (Totem t in Totems) Units[index++] = t;
-        foreach (Card t in Cards) Units[index++] = t;
-        Units[0] = GetPlayer();
+        //foreach (Card t in Cards) Units[index++] = t;
+        //Units[0] = GetPlayer();
     }
 
-    internal Player GetPlayer()
-    {
-        return Totems[0] as Player ?? new Player();
-    }
+    // internal Player GetPlayer()
+    // {
+    //     //return Totems[0] as Player ?? new Player();
+    // }
     
     
     
     public SimPhase Phase => SimPhase.Step;
 
-    public void OnSimStart(in Input input, ref WorldState state)
+    public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state)
     {
         mainPulse.Start(WTime.fixedDt, Totems[0]);
         world.CopyToState(ref state);
     }
 
-    public void OnSimStep(in Input input, ref WorldState state)
+    public void OnSimStep(in CtrlInput ctrlInput, ref WorldState state)
     {
         
         mainPulse.Step(WTime.fixedDt, energy);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Mycelia.Collision.AABB;
 
 namespace Mycelia;
 
@@ -10,7 +11,7 @@ internal static class Simulate
     private static readonly List<ISim> _systems = new();
     private static readonly Dictionary<SimPhase, List<ISim>> _byPhase = new();
 
-    private static Input _input;
+    private static CtrlInput ctrlInput;
     private static WorldState _state;
 
     internal static void Awake(IReadOnlyList<ISim> systems)
@@ -27,12 +28,12 @@ internal static class Simulate
 
     internal static void Start()
     {
-        foreach (var sys in _systems) sys.OnSimStart(_input, ref _state);
+        foreach (var sys in _systems) sys.OnSimStart(ctrlInput, ref _state);
     }
 
-    internal static void Tick(Input input, out WorldState state, out bool stepped)
+    internal static void Tick(CtrlInput ctrlInput, out WorldState state, out bool stepped)
     {
-        _input = input;
+        Simulate.ctrlInput = ctrlInput;
         stepped = false;
         
         //从真实世界采样一次时间
@@ -43,7 +44,7 @@ internal static class Simulate
             RunPhase(SimPhase.PreStep);
             while (WTime.ShouldStep(WTime.fixedDt))
             {
-                WTime.ConsumeStep(WTime.fixedDt);//消耗一次固定步时间
+                WTime.ConsumeStep(WTime.fixedDt); //消耗一次固定步时间
                 RunPhase(SimPhase.Step);
                 _state.Advance();
                 _currentTick++;
@@ -57,7 +58,7 @@ internal static class Simulate
     private static void RunPhase(SimPhase phase)
     {
         if (!_byPhase.TryGetValue(phase, out var list)) return;
-        foreach (var sys in list) sys.OnSimStep(_input, ref _state);
+        foreach (var sys in list) sys.OnSimStep(ctrlInput, ref _state);
     }
 
     private static void Register(ISim? sys)

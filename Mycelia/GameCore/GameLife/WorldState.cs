@@ -18,27 +18,49 @@ public struct WorldState
         tick++;
     }
     
+
+    /// <summary>
+    /// 基本物体类状态
+    /// </summary>
     public struct unitState
     {
         public Vec3 position;
         public Vec3 orientation;
     }
-
+    /// <summary>
+    /// 动态物体类状态
+    /// </summary>
+    public struct PawnState
+    {
+        public Tsf2 tsf;
+        public ActionBits action;
+    }
+    /// <summary>
+    /// tile格类状态
+    /// </summary>
     public struct TileState
     {
         public int id;
         public float height;
         public TileFlags flags;
     }
-
-    public struct PawnState
-    {
-        public Tsf2 tsf;
-        public ActionBits action;
-    }
+    /// <summary>
+    /// 新增扩展类状态
+    /// 1）系统注册自己的状态 如：state.extensions.Register(new XXXState());
+    /// 2）系统在 Sim 中使用 如：ref var combat = ref state.extensions.Get XXXState>();
+    /// </summary>
+    public StateExtensions extensions;
+    
+    
     
     public unitState[] unitStates;
     public PawnState[] pawnStates;
-
+    public PawnState[] roleStates;
+    
     public CameraStand cameraStand;
+    
+    
+    
+
+    
 }

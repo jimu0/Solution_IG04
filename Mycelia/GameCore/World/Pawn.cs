@@ -1,11 +1,16 @@
 namespace Mycelia;
 
-internal class Pawn : Unit
+public class Pawn : UObj
 {
-    internal readonly float speed; //运动速度
+    public readonly float speed; //运动速度
+    public float MaxHp;
+    public float hp;
     
-    internal Pawn()
+    public Pawn()
     {
         speed = 1;
+        MaxHp = 100;
+        hp = 100;
     }
+
 }

@@ -5,10 +5,10 @@ namespace Mycelia;
 public static class InputSystem
 {
     // 当前帧正在累积的“意图状态”
-    private static Input _working;
+    private static CtrlInput _working;
 
     // 已冻结、按 tick 存储的输入历史
-    private static readonly Dictionary<int, Input> _inputsByTick = new();
+    private static readonly Dictionary<int, CtrlInput> _inputsByTick = new();
 
     /// <summary>
     /// 每一渲染帧调用：向“工作输入”写入意图
@@ -40,21 +40,21 @@ public static class InputSystem
     /// <summary>
     /// 生成并冻结一份 Input，明确绑定到某个 tick
     /// </summary>
-    internal static Input ProduceForTick(int tick)
+    internal static CtrlInput ProduceForTick(int tick)
     {
-        if (_inputsByTick.TryGetValue(tick, out Input existing)) return existing;
-        Input input = _working;
-        input.tick = tick;
-        _inputsByTick.Add(tick, input);
-        return input;
+        if (_inputsByTick.TryGetValue(tick, out CtrlInput existing)) return existing;
+        CtrlInput ctrlInput = _working;
+        ctrlInput.tick = tick;
+        _inputsByTick.Add(tick, ctrlInput);
+        return ctrlInput;
     }
 
     /// <summary>
     /// 用于回放 / 调试：直接取历史输入
     /// </summary>
-    internal static bool TryGetRecorded(int tick, out Input input)
+    internal static bool TryGetRecorded(int tick, out CtrlInput ctrlInput)
     {
-        return _inputsByTick.TryGetValue(tick, out input);
+        return _inputsByTick.TryGetValue(tick, out ctrlInput);
     }
 
     /// <summary>

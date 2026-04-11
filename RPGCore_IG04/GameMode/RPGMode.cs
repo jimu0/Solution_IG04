@@ -5,23 +5,36 @@ namespace IGC.RPGCore_IG04;
 public class RPGMode: ISim
 {
     internal double tick;
-
-    public GameControls gameControls = new ();
-    //public cameraStand mainCameraStand = new ();
+    public int gameStage = 2;//游戏阶段(0:待机，1:主界面，2:战斗)
     
+    //public cameraStand mainCameraStand = new ();
+    public BattleGame? battleGame = new();
     
     public SimPhase Phase => SimPhase.Step;
-    public void OnSimStart(in Input input, ref WorldState state)
+    public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state)
     {
         tick=0;
-        state.pawnStates = new WorldState.PawnState[2];
+        
+        
+        if (gameStage == 2)
+        {
+            //battleGame = new BattleGame();
+            state.roleStates = new WorldState.PawnState[60];
+            battleGame?.Init();
+            battleGame?.Start(ctrlInput, ref state);
+        }
     }
 
-    public void OnSimStep(in Input input, ref WorldState state)
+    public void OnSimStep(in CtrlInput ctrlInput, ref WorldState state)
     {
         tick++;
         state.tick = tick;
-        gameControls.PawnMove(input, ref state);
-        //mainCameraStand.SetCameraStandState(new cameraStand(), ref state);
+
+        if (gameStage == 2)
+        {
+            battleGame?.Regulation(ctrlInput, ref state);
+        }
+        
+
     }
 }

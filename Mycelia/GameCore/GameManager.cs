@@ -28,8 +28,8 @@ internal static class GameManager
 
     internal static void Tick()
     {
-        Input input = InputSystem.ProduceForTick(Simulate.NextTick);
-        Simulate.Tick(input, out WorldState state, out bool stepped);
+        CtrlInput ctrlInput = InputSystem.ProduceForTick(Simulate.NextTick);
+        Simulate.Tick(ctrlInput, out WorldState state, out bool stepped);
         if (stepped) Render.Tick(state);
     }
 
