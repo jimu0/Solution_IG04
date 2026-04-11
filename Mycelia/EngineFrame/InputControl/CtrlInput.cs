@@ -3,7 +3,7 @@ using System;
 
 namespace Mycelia;
 
-public struct Input
+public struct CtrlInput
 {
     public int tick;
     public Vec3 move;

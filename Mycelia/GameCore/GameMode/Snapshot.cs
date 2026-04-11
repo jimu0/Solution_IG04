@@ -7,7 +7,7 @@ internal class Snapshot(in UObj[] units) : ISim
     private readonly UObj[] units = units;
 
     public SimPhase Phase => SimPhase.PostStep;
-    public void OnSimStart(in Input input, ref WorldState state)
+    public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state)
     {
         state.unitStates = new WorldState.unitState[units.Length];
 
@@ -20,11 +20,11 @@ internal class Snapshot(in UObj[] units) : ISim
         // }
     }
 
-    public void OnSimStep(in Input input, ref WorldState state)
+    public void OnSimStep(in CtrlInput ctrlInput, ref WorldState state)
     {
         if (units[0] is Player player)
         {
-            Vec3 direction = input.move.Normalized();
+            Vec3 direction = ctrlInput.move.Normalized();
             Vec3 velocity = direction * player.speed * (float)WTime.fixedDt;
             // player.position += velocity;
             // player.orientation = input.aim;

@@ -5,6 +5,6 @@ public interface ISim
 {
     SimPhase Phase { get; }
 
-    void OnSimStart(in Input input, ref WorldState state);
-    void OnSimStep(in Input input, ref WorldState state);
+    void OnSimStart(in CtrlInput ctrlInput, ref WorldState state);
+    void OnSimStep(in CtrlInput ctrlInput, ref WorldState state);
 }

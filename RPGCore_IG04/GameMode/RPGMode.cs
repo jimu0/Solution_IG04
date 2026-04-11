@@ -11,7 +11,7 @@ public class RPGMode: ISim
     public BattleGame? battleGame = new();
     
     public SimPhase Phase => SimPhase.Step;
-    public void OnSimStart(in Input input, ref WorldState state)
+    public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state)
     {
         tick=0;
         
@@ -21,18 +21,18 @@ public class RPGMode: ISim
             //battleGame = new BattleGame();
             state.roleStates = new WorldState.PawnState[60];
             battleGame?.Init();
-            battleGame?.Start(input, ref state);
+            battleGame?.Start(ctrlInput, ref state);
         }
     }
 
-    public void OnSimStep(in Input input, ref WorldState state)
+    public void OnSimStep(in CtrlInput ctrlInput, ref WorldState state)
     {
         tick++;
         state.tick = tick;
 
         if (gameStage == 2)
         {
-            battleGame?.Regulation(input, ref state);
+            battleGame?.Regulation(ctrlInput, ref state);
         }
         
 

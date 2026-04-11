@@ -95,13 +95,13 @@ internal class GameMode : ISim
     
     public SimPhase Phase => SimPhase.Step;
 
-    public void OnSimStart(in Input input, ref WorldState state)
+    public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state)
     {
         mainPulse.Start(WTime.fixedDt, Totems[0]);
         world.CopyToState(ref state);
     }
 
-    public void OnSimStep(in Input input, ref WorldState state)
+    public void OnSimStep(in CtrlInput ctrlInput, ref WorldState state)
     {
         
         mainPulse.Step(WTime.fixedDt, energy);

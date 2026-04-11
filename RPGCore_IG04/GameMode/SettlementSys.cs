@@ -82,7 +82,7 @@ internal sealed class SettlementSystem : ISim
     /// <summary>
     /// 当前系统无启动期状态初始化需求，保留空实现以符合 ISim 接口。
     /// </summary>
-    public void OnSimStart(in Input input, ref WorldState state) { }
+    public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state) { }
 
     /// <summary>
     /// 每个固定 Tick 的结算入口。
@@ -93,7 +93,7 @@ internal sealed class SettlementSystem : ISim
     /// 3) 处理死亡下限（HP 不低于 0）；
     /// 4) 清空事件，避免跨 Tick 重复结算。
     /// </summary>
-    public void OnSimStep(in Input input, ref WorldState state)
+    public void OnSimStep(in CtrlInput ctrlInput, ref WorldState state)
     {
         // 先排序，确保同一批事件在任意机器/任意运行中都有一致应用顺序。
         _ctx.PendingDamages.Sort((a, b) => a.OrderKey.CompareTo(b.OrderKey));

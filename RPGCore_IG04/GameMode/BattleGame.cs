@@ -22,14 +22,14 @@ public class BattleGame
         }
     }
 
-    public void Start(Input input, ref WorldState state)
+    public void Start(CtrlInput ctrlInput, ref WorldState state)
     {
-        gameControls.PawnMove(input, ref state);
+        gameControls.PawnMove(ctrlInput, ref state);
     }
-    public void Regulation(Input input, ref WorldState state)
+    public void Regulation(CtrlInput ctrlInput, ref WorldState state)
     {
         //1.移动系统（Step）
-        gameControls.PawnMove(input, ref state);
+        gameControls.PawnMove(ctrlInput, ref state);
         //mainCameraStand.SetCameraStandState(new cameraStand(), ref state);\
         
         //2.碰撞系统（Step）

@@ -5,12 +5,12 @@ namespace Mycelia;
 internal class Journey : ISim
 {
     public SimPhase Phase => SimPhase.Step;
-    public void OnSimStart(in Input input, ref WorldState state)
+    public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state)
     {
         throw new NotImplementedException();
     }
 
-    public void OnSimStep(in Input input, ref WorldState state)
+    public void OnSimStep(in CtrlInput ctrlInput, ref WorldState state)
     {
         throw new NotImplementedException();
     }
