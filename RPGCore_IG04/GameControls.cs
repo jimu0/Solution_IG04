@@ -20,20 +20,7 @@ public class GameControls
         }
 
         Vec2 step = moveInput * (deltaTime * speed);
-        Vec2 currentPos = controlledRole.tsf.postion;
-
-        // Axis-separated movement reduces wall-sticking and allows sliding.
-        Vec2 xCandidate = new Vec2(currentPos.x + step.x, currentPos.y);
-        if (!collisionSystem.WouldBeBlocked(controlledRole.collider, xCandidate))
-        {
-            currentPos.x = xCandidate.x;
-        }
-
-        Vec2 yCandidate = new Vec2(currentPos.x, currentPos.y + step.y);
-        if (!collisionSystem.WouldBeBlocked(controlledRole.collider, yCandidate))
-        {
-            currentPos.y = yCandidate.y;
-        }
+        Vec2 currentPos = collisionSystem.PredictMoveAndSlide(controlledRole.collider, controlledRole.tsf.postion, step);
 
         Tsf2 nextTsf = controlledRole.tsf;
         nextTsf.postion = currentPos;

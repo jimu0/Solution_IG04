@@ -20,7 +20,7 @@ public class StateExtensions
             System.Array.Resize(ref _data, _data.Length * 2);
 
         _typeToIndex[type] = _count;
-        _data[_count] = state;
+        if (state != null) _data[_count] = state;
         _count++;
     }
 
