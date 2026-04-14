@@ -19,7 +19,7 @@ public struct AABB
         this.size = size;
     }
 
-    public static AABB FromMin(Vec2 min, Vec2 size)
+    public AABB FromMin(Vec2 min, Vec2 size)
     {
         return new AABB(min + size * 0.5f, size);
     }
