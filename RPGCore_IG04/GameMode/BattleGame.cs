@@ -23,8 +23,8 @@ public class BattleGame
             int seed = Environment.TickCount;
             int roleSeed = seed ^ index;
             Rdm rng = new(roleSeed);
-            float x = rng.Range(-50f, 50f);
-            float z = rng.Range(-50f, 50f);
+            float x = rng.Range(-10f, 10f);
+            float z = rng.Range(-10f, 10f);
 
             roles[index].tsf.postion = new Vec2(x, z);
             roles[index].collider.bounds.position = roles[index].tsf.postion;

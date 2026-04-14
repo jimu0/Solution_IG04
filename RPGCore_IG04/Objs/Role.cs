@@ -11,10 +11,9 @@ public class Role : Pawn
     public float MaxArmor;
     public float armor;
     public int weaponId;
-    public AABB bounds;
     public Collider collider;
+    public Rigidbody2D? rigidbody2D;
     public bool isCollided;
-    public readonly Rigidbody2D rigidbody;
     
     // internal struct ItemStack
     // {
@@ -32,9 +31,10 @@ public class Role : Pawn
         MaxArmor = 125;
         armor = 50;
         weaponId = 0;
-        bounds = new AABB(Vec2.Zero, Vec2.One);
-        collider = new Collider(bounds, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
-        rigidbody = new Rigidbody2D(this, 1f);
+        var bounds = new AABB(Vec2.Zero, Vec2.One);
+        rigidbody2D = new Rigidbody2D(this, 1f);
+        collider = new Collider(bounds, ref rigidbody2D, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
+        
     }
 
     public void Attack(int targetId)
