@@ -33,7 +33,8 @@ public class Role : Pawn
         weaponId = 0;
         var bounds = new AABB(Vec2.Zero, Vec2.One);
         rigidbody2D = new Rigidbody2D(this, 1f);
-        collider = new Collider(bounds, ref rigidbody2D, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
+        //rigidbody2D = null;
+        collider = new Collider(bounds,false,false, ref rigidbody2D, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
         
     }
 

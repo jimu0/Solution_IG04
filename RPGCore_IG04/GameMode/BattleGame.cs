@@ -25,10 +25,11 @@ public class BattleGame
             Rdm rng = new(roleSeed);
             float x = rng.Range(-10f, 10f);
             float z = rng.Range(-10f, 10f);
-
+            
             roles[index].tsf.postion = new Vec2(x, z);
             roles[index].collider.bounds.position = roles[index].tsf.postion;
-
+            roles[index].collider.isStatic = index != 0;
+            
             collisionSystem.Add(roles[index].collider);
 
             state.roleStates[index].tsf.postion = roles[index].tsf.postion;
@@ -57,6 +58,9 @@ public class BattleGame
 
         for (int i = 0; i < state.roleStates.Length; i++)
         {
+            // Persist collision resolution so next frame does not restore penetrated positions.
+            roles[i].tsf.postion = roles[i].collider.bounds.position;
+            state.roleStates[i].tsf = roles[i].tsf;
             state.roleStates[i].isCollided = roles[i].isCollided;
         }
     }
