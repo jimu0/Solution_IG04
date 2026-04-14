@@ -11,6 +11,47 @@ public class CollisionSystem
     public void Remove(Collider c) => _colliders.Remove(c);
     public void Clear() => _colliders.Clear();
 
+
+    public bool TryGetBlockingNormal(Collider mover, Vec2 targetPosition, out Vec2 normal)
+    {
+        normal = Vec2.Zero;
+
+        if (mover == null || mover.isTrigger)
+        {
+            return false;
+        }
+
+        AABB targetBounds = mover.bounds;
+        targetBounds.position = targetPosition;
+
+        bool found = false;
+        float bestDepth = -1f;
+
+        for (int i = 0; i < _colliders.Count; i++)
+        {
+            Collider other = _colliders[i];
+            if (ReferenceEquals(other, mover) || other.isTrigger)
+            {
+                continue;
+            }
+
+            Manifold manifold = AABBResolver.Resolve(targetBounds, other.bounds);
+            if (!manifold.isColliding)
+            {
+                continue;
+            }
+
+            if (!found || manifold.depth > bestDepth)
+            {
+                found = true;
+                bestDepth = manifold.depth;
+                normal = manifold.normal;
+            }
+        }
+
+        return found;
+    }
+
     public bool WouldBeBlocked(Collider mover, Vec2 targetPosition)
     {
         if (mover == null || mover.isTrigger)
