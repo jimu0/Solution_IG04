@@ -10,7 +10,18 @@ public class GameControls
 
     public void PawnMove(in CtrlInput ctrlInput, ref WorldState state, Role controlledRole, CollisionSystem collisionSystem)
     {
+        if (controlledRole == null || collisionSystem == null)
+        {
+            return;
+        }
+
+        if (state.roleStates == null || state.roleStates.Length == 0)
+        {
+            state.roleStates = new WorldState.PawnState[1];
+        }
+
         float datatime = (float)WTime.fixedDt;
+        newTsf = controlledRole.tsf;
         Vec2 currentPos = newTsf.postion;
         float deltaX = ctrlInput.move.x * datatime * speed;
         float deltaY = ctrlInput.move.z * datatime * speed;
