@@ -32,6 +32,7 @@ public class Rigidbody2D
     public float GravityScale = 1f;
     public bool UseGravity = true;
     public bool IsKinematic;
+    public Vec2 GravityDirection = new Vec2(0f, -1f);
 
     public float Mass => _mass;
     public float InverseMass => _inverseMass;
@@ -90,5 +91,16 @@ public class Rigidbody2D
     public void Unregister()
     {
         Bodies.Remove(this);
+    }
+
+    // Stops only gravity acceleration contribution; leaves other forces unchanged.
+    public void ResetGravityAcceleration()
+    {
+        UseGravity = false;
+    }
+
+    public void RestoreGravityAcceleration()
+    {
+        UseGravity = true;
     }
 }
