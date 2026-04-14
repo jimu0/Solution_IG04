@@ -13,7 +13,7 @@ public class Role : Pawn
     public int weaponId;
     public static AABB bounds;
     public Collider collider;
-    public bool isCollided = false;
+    public bool isCollided;
     
     // internal struct ItemStack
     // {
@@ -31,7 +31,7 @@ public class Role : Pawn
         MaxArmor = 125;
         armor = 50;
         weaponId = 0;
-        bounds = new AABB(Vec2.One * 0.5f, Vec2.One * 0.5f);
+        bounds = new AABB(Vec2.Zero, Vec2.One);
         collider = new Collider(bounds, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
     }
 
@@ -48,7 +48,7 @@ public class Role : Pawn
 
     public void ColliderOnEnter(Collider other)
     {
-        //var aa = other.userData == this.collider.userData;
+        isCollided = true;
     }
 
     public void ColliderOnStay(Collider other)

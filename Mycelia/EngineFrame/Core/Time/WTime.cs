@@ -6,6 +6,7 @@ public static class WTime
 {
     public static double fixedDt = 1/60f;
     private static readonly Stopwatch stopwatch;
+    public static double now;//此刻
     public static double lastTime;
     public static double accum; //accumulator
     
@@ -13,7 +14,8 @@ public static class WTime
     static WTime()
     {
         stopwatch = Stopwatch.StartNew();
-        lastTime = stopwatch.Elapsed.TotalSeconds;
+        now = stopwatch.Elapsed.TotalSeconds;
+        lastTime = now;
         accum = 0.0;
     }
 
@@ -22,7 +24,7 @@ public static class WTime
     /// </summary>
     public static void Sampling()
     {
-        double now = stopwatch.Elapsed.TotalSeconds;
+        now = stopwatch.Elapsed.TotalSeconds;
         double frameTime = now - lastTime;
         lastTime = now;
         accum += frameTime;

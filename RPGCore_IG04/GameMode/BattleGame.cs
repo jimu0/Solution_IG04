@@ -1,5 +1,6 @@
 using Mycelia;
 using Mycelia.Collision.AABB;
+using Myceliae;
 
 namespace IGC.RPGCore_IG04;
 
@@ -8,35 +9,55 @@ public class BattleGame
     public Role[] roles = new Role[60];
     public GameControls gameControls = new();
     public CollisionSystem collisionSystem = new();
-    
-    
-    
-    //TODO：配置这些角色的位置
 
-    public void Init()
+    //TODO：配置这些角色的位置
+    public void Init(ref WorldState state)
     {
+        collisionSystem.Clear();
+        state.roleStates = new WorldState.PawnState[roles.Length];
+
         for (int index = 0; index < roles.Length; index++)
         {
             roles[index] = new Role();
+
+            int seed = Environment.TickCount;
+            int roleSeed = seed ^ index;
+            Rdm rng = new(roleSeed);
+            float x = rng.Range(-50f, 50f);
+            float z = rng.Range(-50f, 50f);
+
+            roles[index].tsf.postion = new Vec2(x, z);
+            roles[index].collider.bounds.position = roles[index].tsf.postion;
+
             collisionSystem.Add(roles[index].collider);
+
+            state.roleStates[index].tsf.postion = roles[index].tsf.postion;
+            state.roleStates[index].tsf.scale = roles[index].tsf.scale;
+            state.roleStates[index].isCollided = false;
         }
     }
 
     public void Start(CtrlInput ctrlInput, ref WorldState state)
     {
-        gameControls.PawnMove(ctrlInput, ref state);
+        gameControls.PawnMove(ctrlInput, ref state, roles[0], collisionSystem);
     }
+
     public void Regulation(CtrlInput ctrlInput, ref WorldState state)
     {
-        //1.移动系统（Step）
-        gameControls.PawnMove(ctrlInput, ref state);
-        //mainCameraStand.SetCameraStandState(new cameraStand(), ref state);\
+        gameControls.PawnMove(ctrlInput, ref state, roles[0], collisionSystem);
         
-        //2.碰撞系统（Step）
+        for (int i = 0; i < roles.Length; i++)
+        {
+            roles[i].tsf = state.roleStates[i].tsf;
+            roles[i].collider.bounds.position = roles[i].tsf.postion;
+            roles[i].isCollided = false;
+        }
+
         collisionSystem.Step();
-        //3.命中生成系统（Step，写入 PendingDamages）
-        
-        //4.结算系统（Step）
-        //5.快照系统（Step,在最后）
+
+        for (int i = 0; i < state.roleStates.Length; i++)
+        {
+            state.roleStates[i].isCollided = roles[i].isCollided;
+        }
     }
 }

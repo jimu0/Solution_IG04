@@ -34,6 +34,7 @@ public struct WorldState
     {
         public Tsf2 tsf;
         public ActionBits action;
+        public bool isCollided;
     }
     /// <summary>
     /// tile格类状态

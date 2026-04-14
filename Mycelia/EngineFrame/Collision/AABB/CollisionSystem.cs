@@ -9,6 +9,34 @@ public class CollisionSystem
 
     public void Add(Collider c) => _colliders.Add(c);
     public void Remove(Collider c) => _colliders.Remove(c);
+    public void Clear() => _colliders.Clear();
+
+    public bool WouldBeBlocked(Collider mover, Vec2 targetPosition)
+    {
+        if (mover == null || mover.isTrigger)
+        {
+            return false;
+        }
+
+        AABB targetBounds = mover.bounds;
+        targetBounds.position = targetPosition;
+
+        for (int i = 0; i < _colliders.Count; i++)
+        {
+            Collider other = _colliders[i];
+            if (ReferenceEquals(other, mover) || other.isTrigger)
+            {
+                continue;
+            }
+
+            if (AABBTest.Overlap(targetBounds, other.bounds))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public void Step()
     {

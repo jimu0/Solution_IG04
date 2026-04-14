@@ -19,8 +19,7 @@ public class RPGMode: ISim
         if (gameStage == 2)
         {
             //battleGame = new BattleGame();
-            state.roleStates = new WorldState.PawnState[60];
-            battleGame?.Init();
+            battleGame?.Init(ref state);
             battleGame?.Start(ctrlInput, ref state);
         }
     }
