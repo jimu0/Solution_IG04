@@ -12,9 +12,9 @@ public class CollisionSystem
     public void Clear() => _colliders.Clear();
 
 
-    public bool TryGetBlockingNormal(Collider mover, Vec2 targetPosition, out Vec2 normal)
+    public bool TryGetBlockingHit(Collider mover, Vec2 targetPosition, out Manifold hit)
     {
-        normal = Vec2.Zero;
+        hit = default;
 
         if (mover == null || mover.isTrigger)
         {
@@ -35,17 +35,17 @@ public class CollisionSystem
                 continue;
             }
 
-            Manifold manifold = AABBResolver.Resolve(targetBounds, other.bounds);
-            if (!manifold.isColliding)
+            Manifold candidate = AABBResolver.Resolve(targetBounds, other.bounds);
+            if (!candidate.isColliding)
             {
                 continue;
             }
 
-            if (!found || manifold.depth > bestDepth)
+            if (!found || candidate.depth > bestDepth)
             {
                 found = true;
-                bestDepth = manifold.depth;
-                normal = manifold.normal;
+                bestDepth = candidate.depth;
+                hit = candidate;
             }
         }
 
@@ -54,29 +54,7 @@ public class CollisionSystem
 
     public bool WouldBeBlocked(Collider mover, Vec2 targetPosition)
     {
-        if (mover == null || mover.isTrigger)
-        {
-            return false;
-        }
-
-        AABB targetBounds = mover.bounds;
-        targetBounds.position = targetPosition;
-
-        for (int i = 0; i < _colliders.Count; i++)
-        {
-            Collider other = _colliders[i];
-            if (ReferenceEquals(other, mover) || other.isTrigger)
-            {
-                continue;
-            }
-
-            if (AABBTest.Overlap(targetBounds, other.bounds))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return TryGetBlockingHit(mover, targetPosition, out _);
     }
 
     public void Step()

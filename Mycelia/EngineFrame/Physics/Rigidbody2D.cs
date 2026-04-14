@@ -106,9 +106,9 @@ public sealed class Rigidbody2D
         if (MathF.Abs(dx) > 1e-6f)
         {
             Vec2 xCandidate = new Vec2(currentPos.x + dx, currentPos.y);
-            if (collisionSystem.TryGetBlockingNormal(collider, xCandidate, out Vec2 normalX))
+            if (collisionSystem.TryGetBlockingHit(collider, xCandidate, out Manifold hitX))
             {
-                ReflectVelocity(normalX);
+                ReflectVelocity(hitX.normal);
             }
             else
             {
@@ -120,9 +120,9 @@ public sealed class Rigidbody2D
         if (MathF.Abs(dy) > 1e-6f)
         {
             Vec2 yCandidate = new Vec2(currentPos.x, currentPos.y + dy);
-            if (collisionSystem.TryGetBlockingNormal(collider, yCandidate, out Vec2 normalY))
+            if (collisionSystem.TryGetBlockingHit(collider, yCandidate, out Manifold hitY))
             {
-                ReflectVelocity(normalY);
+                ReflectVelocity(hitY.normal);
             }
             else
             {
