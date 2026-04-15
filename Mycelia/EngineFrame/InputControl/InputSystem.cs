@@ -4,8 +4,10 @@ namespace Mycelia;
 
 public static class InputSystem
 {
+    //最大玩家数
+    internal static int NumberOfPlayers = 1;
     // 当前帧正在累积的“意图状态”
-    private static CtrlInput _working;
+    private static CtrlInput _working = new();
 
     // 已冻结、按 tick 存储的输入历史
     private static readonly Dictionary<int, CtrlInput> _inputsByTick = new();
@@ -14,26 +16,36 @@ public static class InputSystem
     /// 每一渲染帧调用：向“工作输入”写入意图
     /// （由平台层调用，比如 Unity / Win32）
     /// </summary>
-    internal static void SetMove(float x, float z)
+    internal static void SetMove(int n, float x, float y)
     {
-        _working.move.x = x;
-        _working.move.z = z;
+        _working.pawnInputs[n].move.x = x;
+        _working.pawnInputs[n].move.z = y;
     }
 
-    internal static void SetAim(float x, float z)
+    internal static void SetJumpPressed(int n, bool pressed)
     {
-        _working.aim.x = x;
-        _working.aim.z = z;
+        _working.pawnInputs[n].jumpPressed = pressed;
     }
 
-    internal static void Press(ActionBits action)
+    internal static void SetJumpHeld(int n, bool held)
     {
-        _working.action |= action;
+        _working.pawnInputs[n].jumpHeld = held;
     }
 
-    internal static void Release(ActionBits action)
+    internal static void SetAim(int n, float x, float y)
     {
-        _working.action &= ~action;
+        _working.pawnInputs[n].aim.x = x;
+        _working.pawnInputs[n].aim.z = y;
+    }
+
+    internal static void Press(int n, ActionBits action)
+    {
+        _working.pawnInputs[n].action |= action;
+    }
+
+    internal static void Release(int n, ActionBits action)
+    {
+        _working.pawnInputs[n].action &= ~action;
     }
 
     
@@ -63,7 +75,7 @@ public static class InputSystem
     internal static void Clear()
     {
         _inputsByTick.Clear();
-        _working = default;
+        _working = new CtrlInput();
     }
     
 }

@@ -1,6 +1,5 @@
 using Mycelia;
 using Mycelia.Collision.AABB;
-using Myceliae;
 
 namespace IGC.RPGCore_IG04;
 
@@ -36,26 +35,19 @@ public class BattleGame
             state.roleStates[index].tsf.scale = roles[index].tsf.scale;
             state.roleStates[index].isCollided = false;
         }
-        gameControls.battleGame = this;
-        gameControls.player0 = roles[0];
+        //gameControls.battleGame = this;
+        gameControls.roles = roles;
     }
 
     public void Start(CtrlInput ctrlInput, ref WorldState state)
     {
-        //gameControls.PawnMove(ctrlInput, ref state);
+        
     }
 
     public void Regulation(CtrlInput ctrlInput, ref WorldState state)
     {
         //输入
-        gameControls.PawnMove(ctrlInput, ref state);
-        
-        // for (int i = 0; i < roles.Length; i++)
-        // {
-        //     roles[i].tsf = state.roleStates[i].tsf;
-        //     roles[i].collider.bounds.position = roles[i].tsf.postion;
-        //     roles[i].isCollided = false;
-        // }
+        gameControls.Behavior(ctrlInput);
         
         //碰撞模拟
         collisionSystem.Step();

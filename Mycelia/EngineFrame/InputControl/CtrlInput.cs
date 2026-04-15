@@ -3,10 +3,38 @@ using System;
 
 namespace Mycelia;
 
-public struct CtrlInput
+public class CtrlInput
 {
+    public readonly int NumberOfPlayers;
     public int tick;
+    public PawnInput[] pawnInputs;
+    
+    public CtrlInput()
+    {
+        NumberOfPlayers = InputSystem.NumberOfPlayers;
+        tick = 0;
+        pawnInputs = new PawnInput[NumberOfPlayers];
+        for (int i = 0; i < NumberOfPlayers; i++)
+        {
+            pawnInputs[i] = new PawnInput
+            {
+                move = Vec3.Zero,
+                jumpPressed = false,
+                jumpHeld = false,
+                aim = Vec3.Zero,
+                aiming = false,
+                action = ActionBits.None
+            };
+        }
+
+    }
+}
+
+public struct PawnInput
+{
     public Vec3 move;
+    public bool jumpPressed;
+    public bool jumpHeld;
     public Vec3 aim;
     public bool aiming;
     public ActionBits action;

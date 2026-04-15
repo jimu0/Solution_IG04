@@ -16,6 +16,8 @@ public class Role : Pawn
     public bool isCollided;
     public bool isGrounded;
     public bool isTouchingWall;
+    public bool isJumping;
+    public float jumpHoldTime;
 
     private readonly HashSet<Collider> _groundContacts = new();
     private readonly HashSet<Collider> _wallContacts = new();
@@ -41,6 +43,11 @@ public class Role : Pawn
         {
             HitData hit = HitData.Create(id, targetId, 1);
         }
+    }
+
+    public void Jump()
+    {
+        rigidbody2D?.AddForce(new Vec2(0,1000));
     }
 
     public void ColliderOnEnter(Collider other)
