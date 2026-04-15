@@ -202,7 +202,7 @@ public class CollisionSystem
             return;
         }
 
-        // 1) XY separated positional correction.
+        // 1) XY 分离式位置校正
         float correctionDepth = System.MathF.Max(penetration - PenetrationSlop, 0f);
         if (correctionDepth > 0f)
         {
@@ -213,7 +213,7 @@ public class CollisionSystem
             SyncOwnerPosition(b);
         }
 
-        // 2) Velocity impulse with restitution (bounce).
+        // 2)具有恢复力的线速度冲量（反弹力）
         Rigidbody2D? rbA = a.rigidbody2D;
         Rigidbody2D? rbB = b.rigidbody2D;
         Vec2 velA = rbA?.Velocity ?? Vec2.Zero;

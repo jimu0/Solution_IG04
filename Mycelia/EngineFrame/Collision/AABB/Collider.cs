@@ -26,6 +26,15 @@ public class Collider
         OnEnter = onEnter;
         OnStay = onStay;
         OnExit = onExit;
+        SyncBoundsFromOwnerPosition();
+    }
 
+    public void SyncBoundsFromOwnerPosition()
+    {
+        UObj? owner = rigidbody2D?.Owner ?? userData as UObj;
+        if (owner != null)
+        {
+            bounds.position = owner.tsf.postion;
+        }
     }
 }

@@ -27,11 +27,13 @@ public class Role : Pawn
         MaxArmor = 125;
         armor = 50;
         weaponId = 0;
-        AABB bounds = new AABB(Vec2.Zero, Vec2.One);
+        AABB bounds = new AABB(tsf.postion, Vec2.One);
         rigidbody2D = new Rigidbody2D(this, 1f);
         collider = new Collider(bounds, false, false, ref rigidbody2D, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
     }
-
+    
+    
+    
     public void Attack(int targetId)
     {
         weaponId = (int)WeaponTypes.None;
@@ -75,7 +77,7 @@ public class Role : Pawn
             if (Vec2.Dot(toOther, gravityDir) > 0f)
             {
                 _groundContacts.Add(other);
-                // Landed: only neutralize gravity acceleration source.
+                // 着陆：仅消除重力加速度的来源。
                 rigidbody2D?.ResetGravityAcceleration();
             }
         }

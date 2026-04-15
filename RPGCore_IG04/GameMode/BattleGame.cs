@@ -36,30 +36,36 @@ public class BattleGame
             state.roleStates[index].tsf.scale = roles[index].tsf.scale;
             state.roleStates[index].isCollided = false;
         }
+        gameControls.battleGame = this;
+        gameControls.player0 = roles[0];
     }
 
     public void Start(CtrlInput ctrlInput, ref WorldState state)
     {
-        gameControls.PawnMove(ctrlInput, ref state, roles[0], collisionSystem);
+        //gameControls.PawnMove(ctrlInput, ref state);
     }
 
     public void Regulation(CtrlInput ctrlInput, ref WorldState state)
     {
-        gameControls.PawnMove(ctrlInput, ref state, roles[0], collisionSystem);
+        //输入
+        gameControls.PawnMove(ctrlInput, ref state);
         
-        for (int i = 0; i < roles.Length; i++)
-        {
-            roles[i].tsf = state.roleStates[i].tsf;
-            roles[i].collider.bounds.position = roles[i].tsf.postion;
-            roles[i].isCollided = false;
-        }
-
+        // for (int i = 0; i < roles.Length; i++)
+        // {
+        //     roles[i].tsf = state.roleStates[i].tsf;
+        //     roles[i].collider.bounds.position = roles[i].tsf.postion;
+        //     roles[i].isCollided = false;
+        // }
+        
+        //碰撞模拟
         collisionSystem.Step();
 
+        //碰撞结果映射
         for (int i = 0; i < state.roleStates.Length; i++)
         {
-            // Persist collision resolution so next frame does not restore penetrated positions.
+            //更新正确位置
             roles[i].tsf.postion = roles[i].collider.bounds.position;
+            //更新最新状态
             state.roleStates[i].tsf = roles[i].tsf;
             state.roleStates[i].isCollided = roles[i].isCollided;
         }
