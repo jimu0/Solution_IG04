@@ -44,12 +44,8 @@ public struct Vec2 : IEquatable<Vec2>
     /// <returns>返回单位向量</returns>
     public Vec2 Normalized()
     {
-        // float lenSq = LengthSq();
-        // if (lenSq < 1e-12f) return Zero;
-        // float invLen = 1.0f / MathF.Sqrt(lenSq);
-        // return new Vec2(x * invLen, y * invLen);
         float len = Length();
-        return len < 1e-12 ? Zero : new Vec2(x / len, y / len);
+        return len < 1e-12 ? Zero : this / len;// this / len也可以是 new Vec2(x / len, y / len);
     }
 
     // ─────────────────────────────────────
@@ -62,10 +58,16 @@ public struct Vec2 : IEquatable<Vec2>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns>返回float</returns>
-    public static float Dot(Vec2 a, Vec2 b)
+    public float Dot(Vec2 a, Vec2 b)
     {
         return a.x * b.x + a.y * b.y;
     }
+    /// <summary>
+    /// 点积（用于投影和碰撞）
+    /// </summary>
+    /// <param name="other">乘数</param>
+    /// <returns>返回float</returns>
+    public float Dot(Vec2 other) => x * other.x + y * other.y;
 
     /// <summary>
     /// 线性插值

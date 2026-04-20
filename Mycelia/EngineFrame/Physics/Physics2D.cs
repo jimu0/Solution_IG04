@@ -1,3 +1,5 @@
+using Mycelia.Physics;
+
 namespace Mycelia;
 
 /// <summary>
@@ -9,21 +11,40 @@ namespace Mycelia;
 public class Physics2D : ISim
 {
     public SimPhase Phase => SimPhase.Step;
-
-    public Vec2 Gravity = new Vec2(0f, -9.81f);
-
+    
+    
     public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state)
     {
+        
+        // PhysicsWorld.AddBody(ball1);
+        // PhysicsWorld.AddBody(ball2);
+        // var collisions = new List<CollisionInfo>();
+        // PhysicsWorld.DetectCollisions(collisions);
+        // foreach (var c in collisions)
+        // {
+        //     //Console.WriteLine($"Collision: Normal={c.Normal}, Depth={c.Depth}");
+        //     state.debugText = $"Collision: Normal={c.Normal}, Depth={c.Depth}";
+        // }
+        
+        
+        //PhysicsSim.AddBody(ball);
+
     }
 
     public void OnSimStep(in CtrlInput ctrlInput, ref WorldState state)
     {
-        float dt = (float)WTime.fixedDt;
-        var bodies = Rigidbody2D.ActiveBodies;
+        // float dt = (float)WTime.fixedDt;
+        // var bodies = Rigidbody2D.ActiveBodies;
+        
+        // for (int i = 0; i < bodies.Count; i++)
+        // {
+        //     bodies[i].Simulate(dt, Gravity);
+        // }
+        
+        //engine.Update();
 
-        for (int i = 0; i < bodies.Count; i++)
-        {
-            bodies[i].Simulate(dt, Gravity);
-        }
+        //state.roleStates[0].tsf.postion = ball.Position;
+        //state.debugText = $"Frame {state.tick}: {ball}";
     }
+    
 }

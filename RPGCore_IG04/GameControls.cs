@@ -9,110 +9,122 @@ public class GameControls
     private readonly float speed = 5f;
     private BattleGame? battleGame => RPGMode.battleGame;
     public Role[]? roles;
-    //public Role? player0;
 
     public void Behavior(CtrlInput ctrlInput)
     {
         if (battleGame == null || roles == null) return;
         for (int n = 0; n < ctrlInput.NumberOfPlayers; n++)
         {
-            //Role t = roles[n];
             PawnMove(ctrlInput.pawnInputs[n], n);
             PawnJump(ctrlInput.pawnInputs[n], n);
         }
     }
 
 
-    private void PawnMove(PawnInput pawnInput, int n)
+    private void PawnMove(PawnInput input, int n)
     {
         if (roles == null) return;
+
         Role role = roles[n];
-        //PawnInput roleInput = ctrlInput.pawnInputs[n];
-        // if (n < ctrlInput.NumberOfPlayers) roleInput = ctrlInput.pawnInputs[n];
-        // else return;//roleInput = new PawnInput();//TODO:其他单位待处理
-        
-        float deltaTime = (float)WTime.fixedDt;
-        Vec2 moveInput = new(pawnInput.move.x, pawnInput.move.z);
-        float moveInputLenSq = moveInput.LengthSq();
-        if (moveInputLenSq > MoveInputEpsilonSq) moveInput = moveInput.Normalized();
-        
-        Vec2 step = moveInput * (deltaTime * speed);
-        if (battleGame != null)
-        {
-            Vec2 currentPos = battleGame.collisionSystem.PredictMoveAndSlide(role.collider, role.tsf.postion, step);
-            role.tsf.postion = currentPos;
-        }
-
-        if (moveInputLenSq > FacingUpdateEpsilonSq) role.tsf.direction = moveInput;
-
-        role.collider.SyncBoundsFromOwnerPosition();
-    }
-
-    private void PawnJump(PawnInput pawnInput, int n)
-    {
-        if (roles == null) return;
-        Role role = roles[n];
-        //PawnInput roleInput = ctrlInput.pawnInputs[n];
-        
-        float dt = (float)WTime.fixedDt;
-        //ref var pawn = ref state.roleStates; // 假设你这么取
-        // === 参数（可以调手感） ===
-        float jumpStartVelocity = 8f;     // 起跳瞬间的速度
-        float jumpHoldForce = 8f;       // 提供力
-        float maxHoldTime = 0.25f;        // 最长“蓄力时间”
-        float holdDecay = 6f;             // 衰减速度（越大越快变弱）
-        
         var rb = role.rigidbody2D;
         if (rb == null) return;
-        // === 起跳（只触发一次） ===
-        if (pawnInput.jumpPressed && role.isGrounded)
+
+        Vec2 moveInput = new(input.move.x, input.move.z);
+
+        if (moveInput.LengthSq() > MoveInputEpsilonSq)
+        {
+            moveInput = moveInput.Normalized();
+
+            // 🎯 目标水平速度
+            float targetSpeed = speed;
+            float accel = 20f; // 控制“加速手感”
+
+            float current = rb.Velocity.x;
+            float target = moveInput.x * targetSpeed;
+
+            // 平滑逼近（比直接赋值更自然）
+            float newVelX = MoveTowards(current, target, accel * (float)WTime.fixedDt);
+
+            //rb.Velocity.x = newVelX;
+
+            // 朝向更新
+            if (moveInput.LengthSq() > FacingUpdateEpsilonSq)
+                role.tsf.direction = moveInput;
+        }
+        else
+        {
+            // 无输入 → 逐渐减速（摩擦替代）
+            float decel = 25f;
+            //rb.Velocity.x = MoveTowards(rb.Velocity.x, 0f, decel * (float)WTime.fixedDt);
+        }
+    }
+
+    private void PawnJump(PawnInput input, int n)
+    {
+        if (roles == null) return;
+
+        Role role = roles[n];
+        var rb = role.rigidbody2D;
+        if (rb == null) return;
+
+        float dt = (float)WTime.fixedDt;
+
+        float jumpStartVelocity = 8f;
+        float jumpHoldForce = 8f;
+        float maxHoldTime = 0.25f;
+        float holdDecay = 6f;
+
+        // 起跳
+        if (input.jumpPressed && role.HasGroundContact)
         {
             role.isJumping = true;
             role.jumpHoldTime = 0f;
 
-            role.isGrounded = false;
-
-            // 给一个瞬时向上速度
-            rb.Velocity.y = jumpStartVelocity;
+            //rb.Velocity.y = jumpStartVelocity;
         }
 
-        // === 按住跳跃 → 持续施力（逐渐减弱） ===
-        if (role.isJumping && pawnInput.jumpHeld)
+        // 持续跳
+        if (role.isJumping && input.jumpHeld)
         {
             if (role.jumpHoldTime < maxHoldTime)
             {
-                // 0 → 1
                 float t = role.jumpHoldTime / maxHoldTime;
-
-                // 衰减函数（指数 or 平滑都可以）
                 float decay = MathF.Exp(-holdDecay * t);
 
-                float force = jumpHoldForce * decay;
-
-                rb.Velocity.y += force * dt;
+                //rb.Velocity.y += jumpHoldForce * decay * dt;
 
                 role.jumpHoldTime += dt;
             }
         }
 
-        // === 提前松开 → 立刻削减上升速度（关键手感点） ===
-        if (role.isJumping && !pawnInput.jumpPressed)
+        // 松手削顶
+        if (role.isJumping && !input.jumpHeld)
         {
-            if (rb.Velocity.y > 0f)
-            {
-                rb.Velocity.y *= 0.5f; // 或者直接 clamp
-            }
+            //if (rb.Velocity.y > 0f)
+                //rb.Velocity.y *= 0.5f;
 
-            role.isJumping = false;
+            //role.isJumping = false;
         }
 
-        // === 落地重置 ===
-        if (role.isGrounded)
+        // 落地重置
+        if (role.HasGroundContact)
         {
             role.isJumping = false;
             role.jumpHoldTime = 0f;
         }
-        
-        role.collider.SyncBoundsFromOwnerPosition();
+    }
+    
+    
+    public static float MoveTowards(float current, float target, float maxDelta)
+    {
+        if (maxDelta <= 0f)
+            return current;
+
+        float delta = target - current;
+
+        if (MathF.Abs(delta) <= maxDelta)
+            return target;
+
+        return current + MathF.Sign(delta) * maxDelta;
     }
 }
