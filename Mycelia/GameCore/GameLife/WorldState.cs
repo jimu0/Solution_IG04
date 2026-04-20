@@ -35,6 +35,9 @@ public struct WorldState
         public Tsf2 tsf;
         public ActionBits action;
         public bool isCollided;
+        public bool isGrounded;
+        public bool isJumping;
+        public float jumpHoldTime; 
     }
     /// <summary>
     /// tile格类状态

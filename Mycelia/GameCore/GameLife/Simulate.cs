@@ -9,7 +9,7 @@ internal static class Simulate
     private static readonly List<ISim> _systems = new();
     private static readonly Dictionary<SimPhase, List<ISim>> _byPhase = new();
 
-    private static CtrlInput ctrlInput;
+    private static CtrlInput ctrlInput = new();
     private static WorldState _state;
 
     internal static void Awake(IReadOnlyList<ISim> systems)
@@ -29,9 +29,9 @@ internal static class Simulate
         foreach (var sys in _systems) sys.OnSimStart(ctrlInput, ref _state);
     }
 
-    internal static void Tick(CtrlInput ctrlInput, out WorldState state, out bool stepped)
+    internal static void Tick(CtrlInput input, out WorldState state, out bool stepped)
     {
-        Simulate.ctrlInput = ctrlInput;
+        ctrlInput = input;
         stepped = false;
         
         //从真实世界采样一次时间

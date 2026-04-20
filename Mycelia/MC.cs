@@ -5,10 +5,13 @@ public struct MC
 {
     public struct Input
     {
-        public static void SetMove(float x, float z) => InputSystem.SetMove(x, z);
-        public static void SetAim(float x, float z) => InputSystem.SetAim(x, z);
-        public static void Press(ActionBits action) => InputSystem.Press(action);
-        public static void Release(ActionBits action) => InputSystem.Release(action);
+        public static void SetNumberOfPlayers(int n) => InputSystem.NumberOfPlayers = n;
+        public static void SetMove(int n, float x, float y) => InputSystem.SetMove(n, x, y);
+        public static void SetJump(int n, bool pressed) => InputSystem.SetJumpPressed(n, pressed);
+        public static void SetJumpHeld(int n, bool held) => InputSystem.SetJumpHeld(n, held);
+        public static void SetAim(int n, float x, float y) => InputSystem.SetAim(n, x, y);
+        public static void Press(int n, ActionBits action) => InputSystem.Press(n, action);
+        public static void Release(int n, ActionBits action) => InputSystem.Release(n, action);
     }
     
     public static List<ISim> listSimSys => GameManager.listSimSys;

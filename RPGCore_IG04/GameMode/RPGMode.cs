@@ -8,7 +8,7 @@ public class RPGMode: ISim
     public int gameStage = 2;//游戏阶段(0:待机，1:主界面，2:战斗)
     
     //public cameraStand mainCameraStand = new ();
-    public BattleGame? battleGame = new();
+    public static BattleGame? battleGame = new();
     
     public SimPhase Phase => SimPhase.Step;
     public void OnSimStart(in CtrlInput ctrlInput, ref WorldState state)

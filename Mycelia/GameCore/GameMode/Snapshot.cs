@@ -24,7 +24,7 @@ internal class Snapshot(in UObj[] units) : ISim
     {
         if (units[0] is Player player)
         {
-            Vec3 direction = ctrlInput.move.Normalized();
+            Vec3 direction = ctrlInput.pawnInputs[0].move.Normalized();
             Vec3 velocity = direction * player.speed * (float)WTime.fixedDt;
             // player.position += velocity;
             // player.orientation = input.aim;
