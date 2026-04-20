@@ -1,6 +1,5 @@
 using Mycelia;
-using Mycelia.Collision.AABB;
-using Myceliae;
+using Mycelia.Physics;
 
 namespace IGC.RPGCore_IG04;
 
@@ -8,12 +7,16 @@ public class BattleGame
 {
     public Role[] roles = new Role[60];
     public GameControls gameControls = new();
-    public CollisionSystem collisionSystem = new();
-
+    
+    public static readonly PhysicsSim PhysicsSim = new();
+    PhysicsEngine engine = new(PhysicsSim);
+    
     //TODO：配置这些角色的位置
     public void Init(ref WorldState state)
     {
-        collisionSystem.Clear();
+
+        
+        
         state.roleStates = new WorldState.PawnState[roles.Length];
 
         for (int index = 0; index < roles.Length; index++)
@@ -24,42 +27,52 @@ public class BattleGame
             int roleSeed = seed ^ index;
             Rdm rng = new(roleSeed);
             float x = rng.Range(-10f, 10f);
-            float z = rng.Range(-10f, 10f);
+            float y = rng.Range(-10f, 10f);
             
-            roles[index].tsf.postion = new Vec2(x, z);
-            roles[index].collider.bounds.position = roles[index].tsf.postion;
-            roles[index].collider.isStatic = index != 0;
+            roles[index].tsf.postion = new Vec2(x, y);
+            Rigidbody2D? obj = roles[index].rigidbody2D;
+            if (obj != null)
+            {
+                obj.Position = roles[index].tsf.postion;
+                PhysicsSim.AddBody(obj);
+            }
             
-            collisionSystem.Add(roles[index].collider);
-
+            // roles[index].collider.bounds.position = roles[index].tsf.postion;
+            // roles[index].collider.isStatic = index != 0;
+            // collisionSystem.Add(roles[index].collider);
+            
             state.roleStates[index].tsf.postion = roles[index].tsf.postion;
             state.roleStates[index].tsf.scale = roles[index].tsf.scale;
             state.roleStates[index].isCollided = false;
+            
+            
         }
+        
+        gameControls.roles = roles;
+        
+       
     }
 
     public void Start(CtrlInput ctrlInput, ref WorldState state)
     {
-        gameControls.PawnMove(ctrlInput, ref state, roles[0], collisionSystem);
+        
     }
 
     public void Regulation(CtrlInput ctrlInput, ref WorldState state)
     {
-        gameControls.PawnMove(ctrlInput, ref state, roles[0], collisionSystem);
+        //输入
+        gameControls.Behavior(ctrlInput);
         
-        for (int i = 0; i < roles.Length; i++)
-        {
-            roles[i].tsf = state.roleStates[i].tsf;
-            roles[i].collider.bounds.position = roles[i].tsf.postion;
-            roles[i].isCollided = false;
-        }
-
-        collisionSystem.Step();
-
+        //物理引擎
+        //collisionSystem.Step();
+        engine.Update();
+        
+        //结果映射
         for (int i = 0; i < state.roleStates.Length; i++)
         {
-            // Persist collision resolution so next frame does not restore penetrated positions.
-            roles[i].tsf.postion = roles[i].collider.bounds.position;
+            //更新正确位置
+            //roles[i].tsf.postion = roles[i].collider.bounds.position;
+            //更新最新状态
             state.roleStates[i].tsf = roles[i].tsf;
             state.roleStates[i].isCollided = roles[i].isCollided;
         }
