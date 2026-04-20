@@ -10,6 +10,12 @@ public struct AABB
         Min = new Vec2(center.x - radius, center.y - radius);
         Max = new Vec2(center.x + radius, center.y + radius);
     }
+    
+    public AABB(Vec2 center, Vec2 halfSize)
+    {
+        Min = center - halfSize;
+        Max = center + halfSize;
+    }
 
     // 检查两个AABB是否重叠
     public static bool Overlaps(AABB a, AABB b)
@@ -23,5 +29,18 @@ public struct AABB
     {
         Min = new Vec2(center.x - radius, center.y - radius);
         Max = new Vec2(center.x + radius, center.y + radius);
+    }
+    
+    public void Update(Vec2 center, Vec2 halfSize)
+    {
+        Min = center - halfSize;
+        Max = center + halfSize;
+    }
+
+    public static AABB FromBody(Rigidbody2D body)
+    {
+        return body.Shape == ColliderShape.Circle
+            ? new AABB(body.Position, body.Radius)
+            : new AABB(body.Position, body.HalfSize);
     }
 }
