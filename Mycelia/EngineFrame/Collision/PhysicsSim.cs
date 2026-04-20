@@ -20,8 +20,8 @@ public class PhysicsSim
                 var b = bodies[j];
                 if (a.Type == BodyType.Static && b.Type == BodyType.Static) continue;
 
-                var aabbA = new AABB(a.Position, a.Radius);
-                var aabbB = new AABB(b.Position, b.Radius);
+                var aabbA = AABB.FromBody(a);
+                var aabbB = AABB.FromBody(b);
                 if (AABB.Overlaps(aabbA, aabbB))
                 {
                     potentialCollisions.Add((a, b));
@@ -34,6 +34,6 @@ public class PhysicsSim
     public void DetectCollisions(List<CollisionInfo> collisions)
     {
         BroadPhase();
-        //CollisionDetector.NarrowPhase(potentialCollisions, collisions);
+        CollisionDetector.NarrowPhase(potentialCollisions, collisions);
     }
 }
