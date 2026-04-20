@@ -1,6 +1,7 @@
 //瑙掕壊鍩虹被
 using System.Collections.Generic;
 using Mycelia;
+using Mycelia.Physics;
 using RPGCore_IG04;
 
 namespace IGC.RPGCore_IG04;
@@ -10,9 +11,9 @@ public class Role : Pawn
     public float MaxArmor;
     public float armor;
     public int weaponId;
-    //public Collider collider;
+    public Collider2D? collider;
     public Rigidbody2D? rigidbody2D;
-    public bool isCollided;
+    //public bool isCollided;
     public bool isGrounded;
     public bool isTouchingWall;
     public bool isJumping;
@@ -31,8 +32,9 @@ public class Role : Pawn
         //AABB bounds = new(tsf.postion, Vec2.One);
         //rigidbody2D = new Rigidbody2D(this);
         //collider = new Collider(bounds, false, false, ref rigidbody2D, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
-        
-        rigidbody2D = new Rigidbody2D(this, tsf.postion, 1.0f, 10.0f);
+
+        collider = new Collider2D(this, ColliderShape.Rectangle,Vec2.One, Vec2.Zero);
+        rigidbody2D = new Rigidbody2D(collider, 1.0f);
     }
     
     

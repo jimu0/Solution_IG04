@@ -1,14 +1,11 @@
 
-using Mycelia.Physics;
-
 namespace Mycelia;
 
 public enum BodyType { Dynamic, Kinematic, Static } // Dynamic: 受物理影响；Kinematic: 手动控制；Static: 固定
-public enum ColliderShape { Circle, Rectangle }
 
 public class Rigidbody2D
 {
-    public UObj? Owner {get; set; }
+    public Collider2D OwnerCollider2D {get; set; }
     public Vec2 Position { get; set; }
     public Vec2 Velocity { get; set; }
     public Vec2 Acceleration { get; set; }
@@ -22,38 +19,21 @@ public class Rigidbody2D
     // 形状
     public ColliderShape Shape { get; set; }
     public float Radius { get; set; } // 圆形半径
-    public Vec2 HalfSize { get; set; } // 矩形半尺寸（AABB）
+    public Vec2 Size { get; set; } // 矩形半尺寸（AABB）
 
-    public Rigidbody2D(UObj? owner, Vec2 position, float mass, float radius, BodyType type = BodyType.Dynamic)
+    public Rigidbody2D(Collider2D collider,float mass, BodyType type = BodyType.Dynamic)
     {
-        Owner = owner;
-        Position = position;
+        OwnerCollider2D = collider;
+        Position = collider.owner != null ? collider.owner.tsf.postion : Vec2.Zero;
         Velocity = new Vec2(0, 0);
         Acceleration = new Vec2(0, 0);
         Mass = mass;
         Restitution = 0.5f;
         Friction = 0.2f;
         Type = type;
-        Shape = ColliderShape.Circle;
-        Radius = radius;
-        HalfSize = Vec2.Zero;
-        AngularVelocity = 0;
-        Rotation = 0;
-    }
-    
-    public Rigidbody2D(UObj? owner, Vec2 position, float mass, Vec2 halfSize, BodyType type = BodyType.Dynamic)
-    {
-        Owner = owner;
-        Position = position;
-        Velocity = new Vec2(0, 0);
-        Acceleration = new Vec2(0, 0);
-        Mass = mass;
-        Restitution = 0.5f;
-        Friction = 0.2f;
-        Type = type;
-        Shape = ColliderShape.Rectangle;
-        Radius = 0;
-        HalfSize = halfSize;
+        Shape = collider.shape;
+        Size = collider.scale;
+        Radius = collider.radius;
         AngularVelocity = 0;
         Rotation = 0;
     }
@@ -73,11 +53,10 @@ public class Rigidbody2D
 
     public void ReseteOwnerTsf()
     {
-        if (Owner == null) return;
-        Owner.tsf.postion = Position;
-        Owner.tsf.scale = Shape == ColliderShape.Circle
-            ? Vec2.One * Radius * 2
-            : HalfSize * 2;
+        if (OwnerCollider2D.owner == null) return;
+        OwnerCollider2D.owner.tsf.postion = Position;
+        OwnerCollider2D.owner.tsf.scale = Shape == ColliderShape.Circle ? Vec2.One * Radius * 2 : Size;
+        
     }
 
     public override string ToString() => $"Pos: {Position}, Vel: {Velocity}, Mass: {Mass}";

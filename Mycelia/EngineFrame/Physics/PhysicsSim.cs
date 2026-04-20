@@ -4,7 +4,7 @@ namespace Mycelia.Physics;
 public class PhysicsSim
 {
     public List<Rigidbody2D> bodies = new List<Rigidbody2D>();
-    private List<(Rigidbody2D A, Rigidbody2D B)> potentialCollisions = new();
+    private List<(Rigidbody2D A, Rigidbody2D B, bool k)> potentialCollisions = new(); //k是优化项，表示AB都为矩形
 
     public void AddBody(Rigidbody2D body) => bodies.Add(body);
 
@@ -19,12 +19,12 @@ public class PhysicsSim
                 var a = bodies[i];
                 var b = bodies[j];
                 if (a.Type == BodyType.Static && b.Type == BodyType.Static) continue;
-
-                var aabbA = AABB.FromBody(a);
-                var aabbB = AABB.FromBody(b);
+                var aabbA = a.OwnerCollider2D.bounds.FromBody(a);
+                var aabbB = b.OwnerCollider2D.bounds.FromBody(a);
                 if (AABB.Overlaps(aabbA, aabbB))
                 {
-                    potentialCollisions.Add((a, b));
+                    var k = a.OwnerCollider2D.shape == ColliderShape.Rectangle && b.OwnerCollider2D.shape == ColliderShape.Rectangle;
+                    potentialCollisions.Add((a, b, k));
                 }
             }
         }
@@ -35,5 +35,6 @@ public class PhysicsSim
     {
         BroadPhase();
         CollisionDetector.NarrowPhase(potentialCollisions, collisions);
+        
     }
 }

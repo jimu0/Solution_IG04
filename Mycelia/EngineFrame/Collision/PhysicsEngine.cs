@@ -3,8 +3,8 @@ namespace Mycelia.Physics;
 public class PhysicsEngine
 {
     private PhysicsSim sim;
-    private Vec2 gravity = new Vec2(0, -9.8f); // 向下重力
-    private float timeStep = 1.0f / 60.0f; // 60 FPS
+    private Vec2 gravity = new(0, -9.8f); // 向下重力
+    private float timeStep = (float)WTime.fixedDt; //1.0f / 60.0f; // 60 FPS
 
     public PhysicsEngine(PhysicsSim sim)
     {
@@ -26,7 +26,6 @@ public class PhysicsEngine
         foreach (var body in sim.bodies)
         {
             if (body.Type != BodyType.Dynamic) continue;
-
             body.Velocity += body.Acceleration * timeStep;
             body.Position += body.Velocity * timeStep;
             body.ResetAcceleration();
@@ -46,11 +45,11 @@ public class PhysicsEngine
         // 4. 边界处理（可选，防止飞出屏幕）
         foreach (var body in sim.bodies)
         {
-            if (body.Position.y <= -100) // 假设屏幕高度
+            if (body.Position.y <= -10) // 假设屏幕高度
             {
                 // body.Position.Y = 500;
                 // body.Velocity.Y *= -body.Restitution; // 反弹
-                body.Position = body.Position with { y = -100 };
+                body.Position = body.Position with { y = -10 };
                 body.Velocity = body.Velocity with { y = body.Velocity.y * -body.Restitution }; // 反弹
             }
         }

@@ -1,4 +1,5 @@
 //游戏世界的所有状态
+
 namespace Mycelia;
 
 public struct WorldState
@@ -33,6 +34,7 @@ public struct WorldState
     public struct PawnState
     {
         public Tsf2 tsf;
+        public ColliderShape colliderShape;
         public ActionBits action;
         public bool isCollided;
         public bool isGrounded;

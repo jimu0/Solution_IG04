@@ -30,11 +30,12 @@ public class BattleGame
             float y = rng.Range(-10f, 10f);
             
             roles[index].tsf.postion = new Vec2(x, y);
-            Rigidbody2D? obj = roles[index].rigidbody2D;
-            if (obj != null)
+            Rigidbody2D? objRigidbody = roles[index].rigidbody2D;
+            if (objRigidbody != null)
             {
-                obj.Position = roles[index].tsf.postion;
-                PhysicsSim.AddBody(obj);
+                objRigidbody.Position = roles[index].tsf.postion;
+                PhysicsSim.AddBody(objRigidbody);//没有物主的刚体不参与模拟
+
             }
             
             // roles[index].collider.bounds.position = roles[index].tsf.postion;
@@ -43,6 +44,9 @@ public class BattleGame
             
             state.roleStates[index].tsf.postion = roles[index].tsf.postion;
             state.roleStates[index].tsf.scale = roles[index].tsf.scale;
+            Collider2D? collider = roles[index].collider;
+            if (collider != null) state.roleStates[index].colliderShape = collider.shape;
+            
             state.roleStates[index].isCollided = false;
             
             
@@ -74,7 +78,8 @@ public class BattleGame
             //roles[i].tsf.postion = roles[i].collider.bounds.position;
             //更新最新状态
             state.roleStates[i].tsf = roles[i].tsf;
-            state.roleStates[i].isCollided = roles[i].isCollided;
+            Collider2D? collider2D = roles[i].collider;
+            state.roleStates[i].isCollided = collider2D is { isCollided: true };
         }
     }
 }

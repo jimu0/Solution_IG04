@@ -3,7 +3,7 @@ namespace Mycelia.Physics;
 public class CollisionDetector
 {
     // 圆形 vs 圆形
-    public static bool DetectCircle(Rigidbody2D a, Rigidbody2D b, out Vec2 normal, out float depth)
+    private static bool DetectCircle(Rigidbody2D a, Rigidbody2D b, out Vec2 normal, out float depth)
     {
         normal = new Vec2(0, 0);
         depth = 0;
@@ -20,15 +20,15 @@ public class CollisionDetector
     }
     
     // 矩形(AABB) vs 矩形(AABB)
-    public static bool DetectRectangle(Rigidbody2D a, Rigidbody2D b, out Vec2 normal, out float depth)
+    private static bool DetectRectangle(Rigidbody2D a, Rigidbody2D b, out Vec2 normal, out float depth)
     {
         normal = Vec2.Zero;
         depth = 0;
 
         Vec2 delta = b.Position - a.Position;
-        float overlapX = a.HalfSize.x + b.HalfSize.x - MathF.Abs(delta.x);
+        float overlapX = a.Size.x/2 + b.Size.x/2 - MathF.Abs(delta.x);
         if (overlapX <= 0) return false;
-        float overlapY = a.HalfSize.y + b.HalfSize.y - MathF.Abs(delta.y);
+        float overlapY = a.Size.y/2 + b.Size.y/2 - MathF.Abs(delta.y);
         if (overlapY <= 0) return false;
 
         if (overlapX < overlapY)
@@ -47,13 +47,13 @@ public class CollisionDetector
 
     // 圆形 vs 矩形(AABB)
     // normal 从圆形(A)指向矩形(B)
-    public static bool DetectCircleRectangle(Rigidbody2D circle, Rigidbody2D rect, out Vec2 normal, out float depth)
+    private static bool DetectCircleRectangle(Rigidbody2D circle, Rigidbody2D rect, out Vec2 normal, out float depth)
     {
         normal = Vec2.Zero;
         depth = 0;
 
-        Vec2 rectMin = rect.Position - rect.HalfSize;
-        Vec2 rectMax = rect.Position + rect.HalfSize;
+        Vec2 rectMin = rect.Position - rect.Size/2;
+        Vec2 rectMax = rect.Position + rect.Size/2;
         float closestX = Math.Clamp(circle.Position.x, rectMin.x, rectMax.x);
         float closestY = Math.Clamp(circle.Position.y, rectMin.y, rectMax.y);
         Vec2 closest = new Vec2(closestX, closestY);
@@ -92,46 +92,57 @@ public class CollisionDetector
         return true;
     }
 
-    public static bool Detect(Rigidbody2D a, Rigidbody2D b, out Vec2 normal, out float depth)
+    private static bool Detect(Rigidbody2D a, Rigidbody2D b, out Vec2 normal, out float depth)
     {
         normal = Vec2.Zero;
         depth = 0;
 
-        if (a.Shape == ColliderShape.Circle && b.Shape == ColliderShape.Circle)
+        switch (a.Shape)
         {
-            return DetectCircle(a, b, out normal, out depth);
+            case ColliderShape.Circle when b.Shape == ColliderShape.Circle:
+                return DetectCircle(a, b, out normal, out depth);
+            case ColliderShape.Rectangle when b.Shape == ColliderShape.Rectangle:
+                return DetectRectangle(a, b, out normal, out depth);
+            case ColliderShape.Circle when b.Shape == ColliderShape.Rectangle:
+                return DetectCircleRectangle(a, b, out normal, out depth);
+            case ColliderShape.Rectangle when b.Shape == ColliderShape.Circle:
+            {
+                bool hit = DetectCircleRectangle(b, a, out normal, out depth);
+                if (hit) normal = -normal; // 转换成从A(矩形)指向B(圆形)
+                return hit;
+            }
+            default: return false;
         }
-
-        if (a.Shape == ColliderShape.Rectangle && b.Shape == ColliderShape.Rectangle)
-        {
-            return DetectRectangle(a, b, out normal, out depth);
-        }
-
-        if (a.Shape == ColliderShape.Circle && b.Shape == ColliderShape.Rectangle)
-        {
-            return DetectCircleRectangle(a, b, out normal, out depth);
-        }
-
-        if (a.Shape == ColliderShape.Rectangle && b.Shape == ColliderShape.Circle)
-        {
-            bool hit = DetectCircleRectangle(b, a, out normal, out depth);
-            if (hit) normal = -normal; // 转换成从A(矩形)指向B(圆形)
-            return hit;
-        }
-
-        return false;
     }
 
     // 窄相处理（在PhysicsSim中调用）
-    public static void NarrowPhase(List<(Rigidbody2D A, Rigidbody2D B)> pairs, List<CollisionInfo> collisions)
+    public static void NarrowPhase(List<(Rigidbody2D A, Rigidbody2D B, bool k)> pairs, List<CollisionInfo> collisions)
     {
         collisions.Clear();
         foreach (var pair in pairs)
         {
             if (Detect(pair.A, pair.B, out var normal, out var depth))
             {
-                collisions.Add(new CollisionInfo { BodyA = pair.A, BodyB = pair.B, Normal = normal, Depth = depth });
+                var col = new CollisionInfo { BodyA = pair.A, BodyB = pair.B, Normal = normal, Depth = depth };
+                collisions.Add(col);
+                col.BodyA.OwnerCollider2D.isCollided = col.Depth > 0;
+                col.BodyB.OwnerCollider2D.isCollided = col.Depth > 0;
             }
+            // pair.A.OwnerCollider2D.isCollided = false;
+            // pair.B.OwnerCollider2D.isCollided = false;
+            // if (pair.k)
+            // {
+            //     pair.A.OwnerCollider2D.isCollided = true;
+            //     pair.B.OwnerCollider2D.isCollided = true;
+            //
+            // }
+            // else if (Detect(pair.A, pair.B, out var normal, out var depth))
+            // {
+            //     var col = new CollisionInfo { BodyA = pair.A, BodyB = pair.B, Normal = normal, Depth = depth };
+            //     collisions.Add(col);
+            //     col.BodyA.OwnerCollider2D.isCollided = col.Depth > 0;
+            //     col.BodyB.OwnerCollider2D.isCollided = col.Depth > 0;
+            // }
         }
     }
 }

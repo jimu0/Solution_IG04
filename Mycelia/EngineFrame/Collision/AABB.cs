@@ -11,10 +11,10 @@ public struct AABB
         Max = new Vec2(center.x + radius, center.y + radius);
     }
     
-    public AABB(Vec2 center, Vec2 halfSize)
+    public AABB(Vec2 center, Vec2 size)
     {
-        Min = center - halfSize;
-        Max = center + halfSize;
+        Min = center - size/2;
+        Max = center + size/2;
     }
 
     // 检查两个AABB是否重叠
@@ -31,16 +31,17 @@ public struct AABB
         Max = new Vec2(center.x + radius, center.y + radius);
     }
     
-    public void Update(Vec2 center, Vec2 halfSize)
+    public void Update(Vec2 center, Vec2 size)
     {
-        Min = center - halfSize;
-        Max = center + halfSize;
+        Min = center - size/2;
+        Max = center + size/2;
     }
+    
 
-    public static AABB FromBody(Rigidbody2D body)
+    public AABB FromBody(Rigidbody2D body)
     {
         return body.Shape == ColliderShape.Circle
-            ? new AABB(body.Position, body.Radius)
-            : new AABB(body.Position, body.HalfSize);
+            ? new AABB(body.Position + body.OwnerCollider2D.offset, body.Radius)
+            : new AABB(body.Position + body.OwnerCollider2D.offset, body.Size);
     }
 }
