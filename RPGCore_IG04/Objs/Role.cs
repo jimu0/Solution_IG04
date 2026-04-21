@@ -112,6 +112,7 @@ public class Role : Pawn
     {
         isGrounded = _groundContacts.Count > 0;
         isTouchingWall = _wallContacts.Count > 0;
+        HasGroundContact = isGrounded;
         collider!.isCollided = isGrounded || isTouchingWall;
     
         if (!isGrounded)
