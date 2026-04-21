@@ -120,8 +120,8 @@ public class CollisionDetector
     public static void NarrowPhase(List<(Rigidbody2D A, Rigidbody2D B, bool k)> pairs, List<CollisionInfo> collisions)
     {
         collisions.Clear();
-        const float slop = 0.00f;
-        const float percent = 1f;
+        const float slop = 0.001f;
+        const float percent = 1.001f;
 
         foreach (var pair in pairs)
         {
