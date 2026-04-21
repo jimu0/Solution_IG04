@@ -12,7 +12,7 @@ public class CollisionDetector
         float distance = delta.Length();
         float sumRadii = a.Radius + b.Radius;
 
-        if (distance >= sumRadii || distance == 0) return false;
+        if (distance >= sumRadii || distance < 1e-6f) return false;
 
         depth = sumRadii - distance;
         normal = delta.Normalized(); // 从A指向B的法线
@@ -42,6 +42,7 @@ public class CollisionDetector
             normal = delta.y >= 0 ? Vec2.Up : Vec2.Down;
         }
 
+        normal = normal.Normalized();
         return true;
     }
 
@@ -119,30 +120,70 @@ public class CollisionDetector
     public static void NarrowPhase(List<(Rigidbody2D A, Rigidbody2D B, bool k)> pairs, List<CollisionInfo> collisions)
     {
         collisions.Clear();
+        const float slop = 0.00f;
+        const float percent = 1f;
+
         foreach (var pair in pairs)
         {
-            if (Detect(pair.A, pair.B, out var normal, out var depth))
+            var A = pair.A;
+            var B = pair.B;
+
+            if (Detect(A, B, out var normal, out var depth))
             {
                 var col = new CollisionInfo { BodyA = pair.A, BodyB = pair.B, Normal = normal, Depth = depth };
                 collisions.Add(col);
                 col.BodyA.OwnerCollider2D.isCollided = col.Depth > 0;
                 col.BodyB.OwnerCollider2D.isCollided = col.Depth > 0;
+                
+                //重置加速度
+                A.Acceleration = Vec2.Zero;
+                B.Acceleration = Vec2.Zero;
+                
+                // --- 穿透修正 ---
+                float correctedDepth = MathF.Max(depth - slop, 0f);
+                var correction = normal * (correctedDepth * percent);
+                
+                
+                // --- 新位置分配,新速度分配---
+                float massA = A.Mass;
+                float massB = B.Mass;
+                float totalMass = massA + massB;
+                // 防止除0（比如两个静态物体）
+                if (totalMass <= 0f)
+                {
+                    // --- 应用速度 ---
+                    A.Velocity = Vec2.Zero;
+                    B.Velocity = Vec2.Zero;
+                    continue;
+                }
+                
+                float ratioA = massB / totalMass;
+                float ratioB = massA / totalMass;
+                // --- 应用位置 ---
+                A.Position -= correction * ratioA;
+                B.Position += correction * ratioB;
+                
+                var rv = B.Velocity - A.Velocity;
+                float velAlongNormal = rv.Dot(normal); // 相对速度在法线方向上的分量
+                if (velAlongNormal > 0) continue; // 如果已经在分离，就不用处理
+                float e = MathF.Max(A.Restitution, B.Restitution);; // impulse 标量（无弹性碰撞 e = 谁弹性大设谁）
+                float invA = 1/A.Mass;
+                float invB = 1/B.Mass;
+                float j = -(1 + e) * velAlongNormal;
+                j /= (invA + invB);
+                var impulse = normal * j;
+                // --- 应用速度 ---
+                var AVel = A.Velocity;
+                var BVel = B.Velocity;
+                AVel -= impulse * invA;
+                BVel += impulse * invB;
+                float vnA = AVel.Dot(normal);
+                if (vnA < 0) A.Velocity -= normal * vnA;
+                else A.Velocity = Vec2.Zero;
+                float vnB = BVel.Dot(normal);
+                if (vnB > 0) B.Velocity -= normal * vnB;
+                else B.Velocity = Vec2.Zero;
             }
-            // pair.A.OwnerCollider2D.isCollided = false;
-            // pair.B.OwnerCollider2D.isCollided = false;
-            // if (pair.k)
-            // {
-            //     pair.A.OwnerCollider2D.isCollided = true;
-            //     pair.B.OwnerCollider2D.isCollided = true;
-            //
-            // }
-            // else if (Detect(pair.A, pair.B, out var normal, out var depth))
-            // {
-            //     var col = new CollisionInfo { BodyA = pair.A, BodyB = pair.B, Normal = normal, Depth = depth };
-            //     collisions.Add(col);
-            //     col.BodyA.OwnerCollider2D.isCollided = col.Depth > 0;
-            //     col.BodyB.OwnerCollider2D.isCollided = col.Depth > 0;
-            // }
         }
     }
 }

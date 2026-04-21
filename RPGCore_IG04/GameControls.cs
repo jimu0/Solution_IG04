@@ -45,7 +45,7 @@ public class GameControls
             // 平滑逼近（比直接赋值更自然）
             float newVelX = MoveTowards(current, target, accel * (float)WTime.fixedDt);
 
-            //rb.Velocity.x = newVelX;
+            rb.Velocity = new(newVelX, rb.Velocity.y);//= newVelX;
 
             // 朝向更新
             if (moveInput.LengthSq() > FacingUpdateEpsilonSq)
@@ -55,7 +55,7 @@ public class GameControls
         {
             // 无输入 → 逐渐减速（摩擦替代）
             float decel = 25f;
-            //rb.Velocity.x = MoveTowards(rb.Velocity.x, 0f, decel * (float)WTime.fixedDt);
+            rb.Velocity = new Vec2(MoveTowards(rb.Velocity.x, 0f, decel * (float)WTime.fixedDt), rb.Velocity.y);
         }
     }
 
@@ -80,7 +80,7 @@ public class GameControls
             role.isJumping = true;
             role.jumpHoldTime = 0f;
 
-            //rb.Velocity.y = jumpStartVelocity;
+            rb.Velocity = new Vec2(rb.Velocity.x,jumpStartVelocity);
         }
 
         // 持续跳
@@ -91,7 +91,7 @@ public class GameControls
                 float t = role.jumpHoldTime / maxHoldTime;
                 float decay = MathF.Exp(-holdDecay * t);
 
-                //rb.Velocity.y += jumpHoldForce * decay * dt;
+                rb.Velocity += new Vec2(0, jumpHoldForce * decay * dt);
 
                 role.jumpHoldTime += dt;
             }
@@ -100,10 +100,13 @@ public class GameControls
         // 松手削顶
         if (role.isJumping && !input.jumpHeld)
         {
-            //if (rb.Velocity.y > 0f)
-                //rb.Velocity.y *= 0.5f;
-
-            //role.isJumping = false;
+            Vec2 v = rb.Velocity;
+            if (rb.Velocity.y > 0f)
+            {
+                v.y *= 0.5f;
+                rb.Velocity = v;
+            }
+            role.isJumping = false;
         }
 
         // 落地重置

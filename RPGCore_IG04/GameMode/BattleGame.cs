@@ -9,7 +9,7 @@ public class BattleGame
     public GameControls gameControls = new();
     
     public static readonly PhysicsSim PhysicsSim = new();
-    PhysicsEngine engine = new(PhysicsSim);
+    public PhysicsEngine engine = new(PhysicsSim);
     
     //TODO：配置这些角色的位置
     public void Init(ref WorldState state)
@@ -68,14 +68,11 @@ public class BattleGame
         gameControls.Behavior(ctrlInput);
         
         //物理引擎
-        //collisionSystem.Step();
         engine.Update();
         
         //结果映射
         for (int i = 0; i < state.roleStates.Length; i++)
         {
-            //更新正确位置
-            //roles[i].tsf.postion = roles[i].collider.bounds.position;
             //更新最新状态
             state.roleStates[i].tsf = roles[i].tsf;
             Collider2D? collider2D = roles[i].collider;

@@ -13,7 +13,11 @@ public class Collider2D
     public AABB bounds;
     public bool isCollided;
 
-    public Collider2D(UObj? owner, ColliderShape shape, Vec2 scale, Vec2 offset)
+    public Action<Collider2D> OnEnter;
+    public Action<Collider2D> OnStay;
+    public Action<Collider2D> OnExit;
+    
+    public Collider2D(UObj? owner, ColliderShape shape, Vec2 scale, Vec2 offset, Action<Collider2D> onEnter, Action<Collider2D> onStay, Action<Collider2D> onExit)
     {
         this.owner = owner;
         this.shape = shape;
@@ -33,4 +37,8 @@ public class Collider2D
                 break;
         }
     }
+    
+    // 碰撞事件
+
 }
+

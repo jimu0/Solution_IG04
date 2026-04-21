@@ -3,8 +3,11 @@ namespace Mycelia.Physics;
 public class PhysicsEngine
 {
     private PhysicsSim sim;
-    private Vec2 gravity = new(0, -9.8f); // 向下重力
-    private float timeStep = (float)WTime.fixedDt; //1.0f / 60.0f; // 60 FPS
+    public Vec2 gravity = new(0, -9.8f); // 向下重力
+    private static float timeStep = (float)WTime.fixedDt; //1.0f / 60.0f; // 60 FPS
+    
+    const float percent = 0.2f;   // 80%~100%
+    //const float slop = 0.01f;     // 容忍微小穿透
 
     public PhysicsEngine(PhysicsSim sim)
     {
@@ -21,7 +24,9 @@ public class PhysicsEngine
                 body.ApplyForce(gravity * body.Mass);
             }
         }
+        
 
+        
         // 2. 积分（更新速度和位置）
         foreach (var body in sim.bodies)
         {
@@ -35,12 +40,19 @@ public class PhysicsEngine
         // 3. 检测和响应碰撞
         var collisions = new List<CollisionInfo>();
         sim.DetectCollisions(collisions);
+        
+        
+        // const int solverIterations = 1;
+        //
+        // for (int i = 0; i < solverIterations; i++)
+        // {
+        //     foreach (var collision in collisions)
+        //     {
+        //         ResolvePosition(collision);
+        //         ResolveVelocity(collision);
+        //     }
+        // }
 
-        foreach (var collision in collisions)
-        {
-            ResolvePosition(collision);
-            ResolveVelocity(collision);
-        }
 
         // 4. 边界处理（可选，防止飞出屏幕）
         foreach (var body in sim.bodies)
@@ -58,17 +70,23 @@ public class PhysicsEngine
     
     public static void ResolvePosition(CollisionInfo info)
     {
-        float totalMass = info.BodyA.Mass + info.BodyB.Mass;
-        if (totalMass == 0) return;
+        // float totalMass = info.BodyA.Mass + info.BodyB.Mass;
+        // if (totalMass == 0) return;
 
         float invMassA = info.BodyA.Mass > 0 ? 1 / info.BodyA.Mass : 0;
         float invMassB = info.BodyB.Mass > 0 ? 1 / info.BodyB.Mass : 0;
-
-        float correction = info.Depth * 0.2f; // 20% 修正比例，避免抖动
+        
+        float invMassSum = invMassA + invMassB;//+
+        if (invMassSum == 0) return;//+
+        
+        float correction = info.Depth * 0.8f; // 20% 修正比例，避免抖动
+        //float correction = MathF.Max(info.Depth - slop, 0) * percent; // 修正比例，避免抖动
         Vec2 correctionVector = info.Normal * correction;
 
         info.BodyA.Position -= correctionVector * (invMassA / (invMassA + invMassB));
         info.BodyB.Position += correctionVector * (invMassB / (invMassA + invMassB));
+        // info.BodyA.Position -= correctionVector * (invMassA / invMassSum);//+
+        // info.BodyB.Position += correctionVector * (invMassB / invMassSum);//+
     }
     
     public static void ResolveVelocity(CollisionInfo info)
@@ -83,6 +101,9 @@ public class PhysicsEngine
         float invMassA = info.BodyA.Mass > 0 ? 1 / info.BodyA.Mass : 0;
         float invMassB = info.BodyB.Mass > 0 ? 1 / info.BodyB.Mass : 0;
 
+        // float biasFactor = 0.2f;//+
+        // float bias = biasFactor * MathF.Max(info.Depth - 0.01f, 0) / timeStep;//+
+        // float j = -(1 + e) * velocityAlongNormal - bias;//+
         float j = -(1 + e) * velocityAlongNormal;
         j /= invMassA + invMassB;
 

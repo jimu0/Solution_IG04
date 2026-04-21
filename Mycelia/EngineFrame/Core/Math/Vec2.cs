@@ -52,16 +52,16 @@ public struct Vec2 : IEquatable<Vec2>
     // 静态函数
     // ─────────────────────────────────────
 
-    /// <summary>
-    /// 点积
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <returns>返回float</returns>
-    public float Dot(Vec2 a, Vec2 b)
-    {
-        return a.x * b.x + a.y * b.y;
-    }
+    // /// <summary>
+    // /// 点积
+    // /// </summary>
+    // /// <param name="a"></param>
+    // /// <param name="b"></param>
+    // /// <returns>返回float</returns>
+    // public float Dot(Vec2 a, Vec2 b)
+    // {
+    //     return a.x * b.x + a.y * b.y;
+    // }
     /// <summary>
     /// 点积（用于投影和碰撞）
     /// </summary>

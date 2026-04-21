@@ -34,7 +34,14 @@ public class PhysicsSim
     public void DetectCollisions(List<CollisionInfo> collisions)
     {
         BroadPhase();
-        CollisionDetector.NarrowPhase(potentialCollisions, collisions);
+        // 根据位置排序（例如 y 从小到大）
+        potentialCollisions.Sort((p1, p2) => 
+            MathF.Min(p1.A.Position.y, p1.B.Position.y).CompareTo(MathF.Min(p2.A.Position.y, p2.B.Position.y)));
+        for (int i = 0; i < 1; i++)
+        {
+            CollisionDetector.NarrowPhase(potentialCollisions, collisions);
+        }
+        
         
     }
 }

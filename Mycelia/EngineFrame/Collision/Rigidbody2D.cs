@@ -27,10 +27,10 @@ public class Rigidbody2D
         Position = collider.owner != null ? collider.owner.tsf.postion : Vec2.Zero;
         Velocity = new Vec2(0, 0);
         Acceleration = new Vec2(0, 0);
-        Mass = mass;
-        Restitution = 0.5f;
+        Restitution = 0.0f;
         Friction = 0.2f;
         Type = type;
+        Mass = type != BodyType.Static ? mass : 0;
         Shape = collider.shape;
         Size = collider.scale;
         Radius = collider.radius;
@@ -48,7 +48,13 @@ public class Rigidbody2D
     // 重置加速度（每帧调用）
     public void ResetAcceleration()
     {
-        Acceleration = new Vec2(0, 0);
+        Acceleration = Vec2.Zero;
+    }
+    //仅消除重力加速度
+    public void RestoreGravityAcceleration()
+    {
+        Vec2 acc = new(Acceleration.x, 0);
+        Acceleration = acc;
     }
 
     public void ReseteOwnerTsf()

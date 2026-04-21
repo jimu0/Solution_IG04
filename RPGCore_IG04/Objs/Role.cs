@@ -19,8 +19,8 @@ public class Role : Pawn
     public bool isJumping;
     public float jumpHoldTime;
 
-    // private readonly HashSet<Collider> _groundContacts = new();
-    // private readonly HashSet<Collider> _wallContacts = new();
+    private readonly HashSet<Collider2D> _groundContacts = new();
+    private readonly HashSet<Collider2D> _wallContacts = new();
 
     public Role()
     {
@@ -29,11 +29,9 @@ public class Role : Pawn
         MaxArmor = 125;
         armor = 50;
         weaponId = 0;
-        //AABB bounds = new(tsf.postion, Vec2.One);
-        //rigidbody2D = new Rigidbody2D(this);
         //collider = new Collider(bounds, false, false, ref rigidbody2D, this, ColliderOnEnter, ColliderOnStay, ColliderOnExit);
 
-        collider = new Collider2D(this, ColliderShape.Rectangle,Vec2.One, Vec2.Zero);
+        collider = new Collider2D(this, ColliderShape.Rectangle,Vec2.One, Vec2.Zero,ColliderOnEnter,ColliderOnStay,ColliderOnExit);
         rigidbody2D = new Rigidbody2D(collider, 1.0f);
     }
     
@@ -50,75 +48,75 @@ public class Role : Pawn
 
     public void Jump()
     {
-        //rigidbody2D?.AddForce(new Vec2(0,1000));
+        rigidbody2D?.ApplyForce(new Vec2(0,1000));
     }
 
-    // public void ColliderOnEnter(Collider other)
-    // {
-    //     RegisterContact(other);
-    // }
-    //
-    // public void ColliderOnStay(Collider other)
-    // {
-    //     RegisterContact(other);
-    // }
-    //
-    // public void ColliderOnExit(Collider other)
-    // {
-    //     _groundContacts.Remove(other);
-    //     _wallContacts.Remove(other);
-    //     RefreshContactFlags();
-    // }
-    //
-    // private void RegisterContact(Collider other)
-    // {
-    //     if (other == null)
-    //     {
-    //         return;
-    //     }
-    //
-    //     Vec2 toOther = other.bounds.position - collider.bounds.position;
-    //     float absX = System.MathF.Abs(toOther.x);
-    //     float absY = System.MathF.Abs(toOther.y);
-    //
-    //     if (absY >= absX)
-    //     {
-    //         Vec2 gravityDir = GetGravityDir();
-    //         if (Vec2.Dot(toOther, gravityDir) > 0f)
-    //         {
-    //             _groundContacts.Add(other);
-    //             // 着陆：仅消除重力加速度的来源。
-    //             rigidbody2D?.ResetGravityAcceleration();
-    //         }
-    //     }
-    //     else
-    //     {
-    //         _wallContacts.Add(other);
-    //     }
-    //
-    //     RefreshContactFlags();
-    // }
-    //
-    // private Vec2 GetGravityDir()
-    // {
-    //     if (rigidbody2D == null)
-    //     {
-    //         return new Vec2(0f, -1f);
-    //     }
-    //
-    //     Vec2 dir = rigidbody2D.GravityDirection;
-    //     return dir.LengthSq() > 1e-8f ? dir.Normalized() : new Vec2(0f, -1f);
-    // }
-    //
-    // private void RefreshContactFlags()
-    // {
-    //     isGrounded = _groundContacts.Count > 0;
-    //     isTouchingWall = _wallContacts.Count > 0;
-    //     isCollided = isGrounded || isTouchingWall;
-    //
-    //     if (!isGrounded)
-    //     {
-    //         rigidbody2D?.RestoreGravityAcceleration();
-    //     }
-    // }
+    public void ColliderOnEnter(Collider2D other)
+    {
+        RegisterContact(other);
+    }
+    
+    public void ColliderOnStay(Collider2D other)
+    {
+        RegisterContact(other);
+    }
+    
+    public void ColliderOnExit(Collider2D other)
+    {
+        _groundContacts.Remove(other);
+        _wallContacts.Remove(other);
+        RefreshContactFlags();
+    }
+    
+    private void RegisterContact(Collider2D? other)
+    {
+        if (other == null)
+        {
+            return;
+        }
+    
+        Vec2 toOther = other.owner!.tsf.postion - collider!.owner!.tsf.postion;
+        float absX = System.MathF.Abs(toOther.x);
+        float absY = System.MathF.Abs(toOther.y);
+    
+        if (absY >= absX)
+        {
+            Vec2 gravityDir = GetGravityDir();
+            if (toOther.Dot(gravityDir) > 0f)
+            {
+                _groundContacts.Add(other);
+                // 着陆：仅消除重力加速度的来源。
+                rigidbody2D?.RestoreGravityAcceleration();
+            }
+        }
+        else
+        {
+            _wallContacts.Add(other);
+        }
+    
+        RefreshContactFlags();
+    }
+    
+    private Vec2 GetGravityDir()
+    {
+        if (rigidbody2D == null)
+        {
+            return new Vec2(0f, -1f);
+        }
+
+        Vec2 dir = RPGMode.battleGame!.engine.gravity;
+        return dir.LengthSq() > 1e-8f ? dir.Normalized() : new Vec2(0f, -1f);
+    }
+    
+    private void RefreshContactFlags()
+    {
+        isGrounded = _groundContacts.Count > 0;
+        isTouchingWall = _wallContacts.Count > 0;
+        collider!.isCollided = isGrounded || isTouchingWall;
+    
+        if (!isGrounded)
+        {
+            rigidbody2D?.RestoreGravityAcceleration();
+        }
+    }
 }
