@@ -12,6 +12,7 @@ public class Rigidbody2D
     public float Mass { get; set; } // 质量，0表示无限质量（Static）
     public float Restitution { get; set; } // 弹性系数，0-1，1为完全弹性
     public float Friction { get; set; } // 摩擦系数
+    public bool UseFriction { get; set; } // 是否参与碰撞切向摩擦
     public BodyType Type { get; set; }
     public float AngularVelocity { get; set; } // 角速度（简化，仅2D旋转）
     public float Rotation { get; set; } // 旋转角度（弧度）
@@ -29,6 +30,7 @@ public class Rigidbody2D
         Acceleration = new Vec2(0, 0);
         Restitution = 0.0f;
         Friction = 0.2f;
+        UseFriction = true;
         Type = type;
         Mass = type != BodyType.Static ? mass : 0;
         Shape = collider.shape;

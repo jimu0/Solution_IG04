@@ -58,6 +58,14 @@ public static class InputSystem
         CtrlInput ctrlInput = _working;
         ctrlInput.tick = tick;
         _inputsByTick.Add(tick, ctrlInput);
+
+        // jumpPressed 语义是“本 tick 按下”，消费后自动清零；
+        // jumpHeld 保持原值用于持续跳。
+        for (int i = 0; i < _working.pawnInputs.Length; i++)
+        {
+            _working.pawnInputs[i].jumpPressed = false;
+        }
+
         return ctrlInput;
     }
 

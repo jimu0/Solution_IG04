@@ -172,17 +172,34 @@ public class CollisionDetector
                 float j = -(1 + e) * velAlongNormal;
                 j /= (invA + invB);
                 var impulse = normal * j;
-                // --- 应用速度 ---
-                var AVel = A.Velocity;
-                var BVel = B.Velocity;
-                AVel -= impulse * invA;
-                BVel += impulse * invB;
-                float vnA = AVel.Dot(normal);
-                if (vnA < 0) A.Velocity -= normal * vnA;
-                else A.Velocity = Vec2.Zero;
-                float vnB = BVel.Dot(normal);
-                if (vnB > 0) B.Velocity -= normal * vnB;
-                else B.Velocity = Vec2.Zero;
+                // --- 应用法线速度 ---
+                A.Velocity -= impulse * invA;
+                B.Velocity += impulse * invB;
+
+                // --- 应用切向摩擦（仅碰撞接触时） ---
+                var rvAfterNormal = B.Velocity - A.Velocity;
+                var tangent = rvAfterNormal - normal * rvAfterNormal.Dot(normal);
+                if (tangent.LengthSq() > 1e-8f)
+                {
+                    tangent = tangent.Normalized();
+                    float jt = -rvAfterNormal.Dot(tangent);
+                    jt /= (invA + invB);
+
+                    float mu = 0f;
+                    if (A.UseFriction && B.UseFriction)
+                    {
+                        mu = MathF.Sqrt(MathF.Max(A.Friction, 0f) * MathF.Max(B.Friction, 0f));
+                    }
+
+                    if (mu > 0f)
+                    {
+                        float maxFrictionImpulse = j * mu;
+                        jt = Math.Clamp(jt, -maxFrictionImpulse, maxFrictionImpulse);
+                        var frictionImpulse = tangent * jt;
+                        A.Velocity -= frictionImpulse * invA;
+                        B.Velocity += frictionImpulse * invB;
+                    }
+                }
             }
         }
     }
