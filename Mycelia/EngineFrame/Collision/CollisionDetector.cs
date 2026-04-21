@@ -145,20 +145,14 @@ public class CollisionDetector
                 
                 
                 // --- 新位置分配,新速度分配---
-                float massA = A.Mass;
-                float massB = B.Mass;
-                float totalMass = massA + massB;
+                float invA = (A.Type == BodyType.Static || A.Mass <= 0f) ? 0f : 1f / A.Mass;
+                float invB = (B.Type == BodyType.Static || B.Mass <= 0f) ? 0f : 1f / B.Mass;
+                float invTotal = invA + invB;
                 // 防止除0（比如两个静态物体）
-                if (totalMass <= 0f)
-                {
-                    // --- 应用速度 ---
-                    A.Velocity = Vec2.Zero;
-                    B.Velocity = Vec2.Zero;
-                    continue;
-                }
+                if (invTotal <= 0f) continue;
                 
-                float ratioA = massB / totalMass;
-                float ratioB = massA / totalMass;
+                float ratioA = invA / invTotal;
+                float ratioB = invB / invTotal;
                 // --- 应用位置 ---
                 A.Position -= correction * ratioA;
                 B.Position += correction * ratioB;
@@ -167,10 +161,8 @@ public class CollisionDetector
                 float velAlongNormal = rv.Dot(normal); // 相对速度在法线方向上的分量
                 if (velAlongNormal > 0) continue; // 如果已经在分离，就不用处理
                 float e = MathF.Max(A.Restitution, B.Restitution);; // impulse 标量（无弹性碰撞 e = 谁弹性大设谁）
-                float invA = 1/A.Mass;
-                float invB = 1/B.Mass;
                 float j = -(1 + e) * velAlongNormal;
-                j /= (invA + invB);
+                j /= invTotal;
                 var impulse = normal * j;
                 // --- 应用法线速度 ---
                 A.Velocity -= impulse * invA;
