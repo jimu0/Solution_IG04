@@ -145,20 +145,14 @@ public class CollisionDetector
                 
                 
                 // --- 新位置分配,新速度分配---
-                float massA = A.Mass;
-                float massB = B.Mass;
-                float totalMass = massA + massB;
+                float invA = (A.Type == BodyType.Static || A.Mass <= 0f) ? 0f : 1f / A.Mass;
+                float invB = (B.Type == BodyType.Static || B.Mass <= 0f) ? 0f : 1f / B.Mass;
+                float invTotal = invA + invB;
                 // 防止除0（比如两个静态物体）
-                if (totalMass <= 0f)
-                {
-                    // --- 应用速度 ---
-                    A.Velocity = Vec2.Zero;
-                    B.Velocity = Vec2.Zero;
-                    continue;
-                }
+                if (invTotal <= 0f) continue;
                 
-                float ratioA = massB / totalMass;
-                float ratioB = massA / totalMass;
+                float ratioA = invA / invTotal;
+                float ratioB = invB / invTotal;
                 // --- 应用位置 ---
                 A.Position -= correction * ratioA;
                 B.Position += correction * ratioB;
@@ -167,22 +161,37 @@ public class CollisionDetector
                 float velAlongNormal = rv.Dot(normal); // 相对速度在法线方向上的分量
                 if (velAlongNormal > 0) continue; // 如果已经在分离，就不用处理
                 float e = MathF.Max(A.Restitution, B.Restitution);; // impulse 标量（无弹性碰撞 e = 谁弹性大设谁）
-                float invA = 1/A.Mass;
-                float invB = 1/B.Mass;
                 float j = -(1 + e) * velAlongNormal;
-                j /= (invA + invB);
+                j /= invTotal;
                 var impulse = normal * j;
-                // --- 应用速度 ---
-                var AVel = A.Velocity;
-                var BVel = B.Velocity;
-                AVel -= impulse * invA;
-                BVel += impulse * invB;
-                float vnA = AVel.Dot(normal);
-                if (vnA < 0) A.Velocity -= normal * vnA;
-                else A.Velocity = Vec2.Zero;
-                float vnB = BVel.Dot(normal);
-                if (vnB > 0) B.Velocity -= normal * vnB;
-                else B.Velocity = Vec2.Zero;
+                // --- 应用法线速度 ---
+                A.Velocity -= impulse * invA;
+                B.Velocity += impulse * invB;
+
+                // --- 应用切向摩擦（仅碰撞接触时） ---
+                var rvAfterNormal = B.Velocity - A.Velocity;
+                var tangent = rvAfterNormal - normal * rvAfterNormal.Dot(normal);
+                if (tangent.LengthSq() > 1e-8f)
+                {
+                    tangent = tangent.Normalized();
+                    float jt = -rvAfterNormal.Dot(tangent);
+                    jt /= (invA + invB);
+
+                    float mu = 0f;
+                    if (A.UseFriction && B.UseFriction)
+                    {
+                        mu = MathF.Sqrt(MathF.Max(A.Friction, 0f) * MathF.Max(B.Friction, 0f));
+                    }
+
+                    if (mu > 0f)
+                    {
+                        float maxFrictionImpulse = j * mu;
+                        jt = Math.Clamp(jt, -maxFrictionImpulse, maxFrictionImpulse);
+                        var frictionImpulse = tangent * jt;
+                        A.Velocity -= frictionImpulse * invA;
+                        B.Velocity += frictionImpulse * invB;
+                    }
+                }
             }
         }
     }

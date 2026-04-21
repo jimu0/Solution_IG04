@@ -74,7 +74,7 @@ public class GameControls
         float holdDecay = 6f;
 
         // 起跳
-        if (input.jumpPressed && role.HasGroundContact)
+        if (input.jumpPressed && role.isGrounded)
         {
             role.isJumping = true;
             role.jumpHoldTime = 0f;
@@ -109,7 +109,7 @@ public class GameControls
         }
 
         // 落地重置
-        if (role.HasGroundContact)
+        if (role.isGrounded)
         {
             role.isJumping = false;
             role.jumpHoldTime = 0f;

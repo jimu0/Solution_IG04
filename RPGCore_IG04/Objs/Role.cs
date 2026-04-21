@@ -33,6 +33,7 @@ public class Role : Pawn
 
         collider = new Collider2D(this, ColliderShape.Rectangle,Vec2.One, Vec2.Zero,ColliderOnEnter,ColliderOnStay,ColliderOnExit);
         rigidbody2D = new Rigidbody2D(collider, 1.0f);
+        rigidbody2D.UseFriction = false; // 角色移动由输入系统直接驱动，不受物理摩擦减速影响
     }
     
     
@@ -112,6 +113,7 @@ public class Role : Pawn
     {
         isGrounded = _groundContacts.Count > 0;
         isTouchingWall = _wallContacts.Count > 0;
+        HasGroundContact = isGrounded;
         collider!.isCollided = isGrounded || isTouchingWall;
     
         if (!isGrounded)
