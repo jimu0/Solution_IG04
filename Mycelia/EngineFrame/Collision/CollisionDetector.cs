@@ -127,7 +127,7 @@ public class CollisionDetector
         {
             var A = pair.A;
             var B = pair.B;
-            
+
             if (Detect(A, B, out var normal, out var depth))
             {
                 var col = new CollisionInfo { BodyA = pair.A, BodyB = pair.B, Normal = normal, Depth = depth };
@@ -167,31 +167,6 @@ public class CollisionDetector
                 // --- 应用法线速度 ---
                 A.Velocity -= impulse * invA;
                 B.Velocity += impulse * invB;
-
-                // --- 应用切向摩擦（仅碰撞接触时） ---
-                var rvAfterNormal = B.Velocity - A.Velocity;
-                var tangent = rvAfterNormal - normal * rvAfterNormal.Dot(normal);
-                if (tangent.LengthSq() > 1e-8f)
-                {
-                    tangent = tangent.Normalized();
-                    float jt = -rvAfterNormal.Dot(tangent);
-                    jt /= (invA + invB);
-
-                    float mu = 0f;
-                    if (A.UseFriction && B.UseFriction)
-                    {
-                        mu = MathF.Sqrt(MathF.Max(A.Friction, 0f) * MathF.Max(B.Friction, 0f));
-                    }
-
-                    if (mu > 0f)
-                    {
-                        float maxFrictionImpulse = j * mu;
-                        jt = Math.Clamp(jt, -maxFrictionImpulse, maxFrictionImpulse);
-                        var frictionImpulse = tangent * jt;
-                        A.Velocity -= frictionImpulse * invA;
-                        B.Velocity += frictionImpulse * invB;
-                    }
-                }
             }
         }
     }
