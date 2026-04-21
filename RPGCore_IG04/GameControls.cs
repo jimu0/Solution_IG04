@@ -45,11 +45,10 @@ public class GameControls
             // 平滑逼近（比直接赋值更自然）
             float newVelX = MoveTowards(current, target, accel * (float)WTime.fixedDt);
 
-            rb.Velocity = new(newVelX, rb.Velocity.y);//= newVelX;
+            rb.Velocity = new(newVelX, rb.Velocity.y);
 
             // 朝向更新
-            if (moveInput.LengthSq() > FacingUpdateEpsilonSq)
-                role.tsf.direction = moveInput;
+            if (moveInput.LengthSq() > FacingUpdateEpsilonSq) role.tsf.direction = moveInput;
         }
         else
         {
@@ -69,7 +68,7 @@ public class GameControls
 
         float dt = (float)WTime.fixedDt;
 
-        float jumpStartVelocity = 8f;
+        float jumpStartVelocity = 16f;
         float jumpHoldForce = 8f;
         float maxHoldTime = 0.25f;
         float holdDecay = 6f;
