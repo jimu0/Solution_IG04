@@ -53,6 +53,8 @@ public class PhysicsEngine
                 // body.Velocity.Y *= -body.Restitution; // 反弹
                 body.Position = body.Position with { y = -10 };
                 body.Velocity = body.Velocity with { y = body.Velocity.y * -body.Restitution }; // 反弹
+                body.Friction = 0f;
+                body.UseFriction = false;
             }
         }
     }

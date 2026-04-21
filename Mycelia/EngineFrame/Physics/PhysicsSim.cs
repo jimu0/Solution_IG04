@@ -14,6 +14,8 @@ public class PhysicsSim
         potentialCollisions.Clear();
         for (int i = 0; i < bodies.Count; i++)
         {
+            bodies[i].OwnerCollider2D.isCollided = false;
+            
             for (int j = i + 1; j < bodies.Count; j++)
             {
                 var a = bodies[i];

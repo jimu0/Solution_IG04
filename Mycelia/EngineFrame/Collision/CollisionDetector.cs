@@ -127,7 +127,7 @@ public class CollisionDetector
         {
             var A = pair.A;
             var B = pair.B;
-
+            
             if (Detect(A, B, out var normal, out var depth))
             {
                 var col = new CollisionInfo { BodyA = pair.A, BodyB = pair.B, Normal = normal, Depth = depth };

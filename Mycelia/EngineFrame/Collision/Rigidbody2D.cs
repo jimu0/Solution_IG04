@@ -29,8 +29,8 @@ public class Rigidbody2D
         Velocity = new Vec2(0, 0);
         Acceleration = new Vec2(0, 0);
         Restitution = 0.0f;
-        Friction = 0.2f;
-        UseFriction = true;
+        Friction = 1f;
+        UseFriction = false;
         Type = type;
         Mass = type != BodyType.Static ? mass : 0;
         Shape = collider.shape;
