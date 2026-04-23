@@ -41,7 +41,7 @@ public class PhysicsEngine
         // 3. 检测和响应碰撞
         var collisions = new List<CollisionInfo>();
         sim.DetectCollisions(collisions);
-        CarryUpperBodies(collisions);
+        //CarryUpperBodies(collisions);
         
         
 
@@ -68,35 +68,35 @@ public class PhysicsEngine
         }
     }
 
-    private void CarryUpperBodies(List<CollisionInfo> collisions)
-    {
-        foreach (var collision in collisions)
-        {
-            // 只处理“上下接触”，忽略侧向碰撞
-            if (System.MathF.Abs(collision.Normal.y) < 0.5f) continue;
-
-            Rigidbody2D lower;
-            Rigidbody2D upper;
-            if (collision.Normal.y > 0f)
-            {
-                lower = collision.BodyA;
-                upper = collision.BodyB;
-            }
-            else
-            {
-                lower = collision.BodyB;
-                upper = collision.BodyA;
-            }
-
-            if (upper.Type != BodyType.Dynamic) continue;
-            if (upper.Position.y <= lower.Position.y) continue;
-
-            // 下方物体横向位移传递给上方物体（平台带动）
-            float carryDx = lower.Velocity.x * timeStep;
-            upper.Position = upper.Position with { x = upper.Position.x + carryDx };
-            upper.Velocity = upper.Velocity with { x = lower.Velocity.x };
-            upper.ReseteOwnerTsf();
-        }
-    }
+    // private void CarryUpperBodies(List<CollisionInfo> collisions)
+    // {
+    //     foreach (var collision in collisions)
+    //     {
+    //         // 只处理“上下接触”，忽略侧向碰撞
+    //         if (System.MathF.Abs(collision.Normal.y) < 0.5f) continue;
+    //
+    //         Rigidbody2D lower;
+    //         Rigidbody2D upper;
+    //         if (collision.Normal.y > 0f)
+    //         {
+    //             lower = collision.BodyA;
+    //             upper = collision.BodyB;
+    //         }
+    //         else
+    //         {
+    //             lower = collision.BodyB;
+    //             upper = collision.BodyA;
+    //         }
+    //
+    //         if (upper.Type != BodyType.Dynamic) continue;
+    //         if (upper.Position.y <= lower.Position.y) continue;
+    //
+    //         // 下方物体横向位移传递给上方物体（平台带动）
+    //         float carryDx = lower.Velocity.x * timeStep;
+    //         upper.Position = upper.Position with { x = upper.Position.x + carryDx };
+    //         upper.Velocity = upper.Velocity with { x = lower.Velocity.x };
+    //         upper.ReseteOwnerTsf();
+    //     }
+    // }
     
 }
