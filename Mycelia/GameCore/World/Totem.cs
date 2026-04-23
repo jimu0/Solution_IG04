@@ -1,5 +1,5 @@
 
-namespace Mycelia;
+namespace Mycelia.World;
 //图腾，基础设备类
 internal class Totem : UObj, IPulseNode
 {
@@ -11,12 +11,18 @@ internal class Totem : UObj, IPulseNode
     internal float consume = 0; //能耗
     internal int level = 0; //等级
     internal int tier = 0; //层级
-    internal IPulseNode? parent; //父级
+    internal readonly IPulseNode? parent; //父级
     internal readonly IPulseNode?[] targets = new IPulseNode[8]; //8个儿子
+
+    public Totem(IPulseNode? parent)
+    {
+        this.parent = parent;//构建图腾时必须创建一个父级
+    }
     //public int childCount = 0;
     //public Action skill=new Action(_ => _); //能力
 
     public float Cost => 1;//mp < consume ? float.PositiveInfinity : consume;
+    //public IPulseNode? Parent => parent;
     public IPulseNode?[] Targets => targets;
 
     public void Execute(Energy context)

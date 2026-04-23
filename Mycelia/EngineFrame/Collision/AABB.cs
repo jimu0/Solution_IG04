@@ -1,4 +1,4 @@
-namespace Mycelia.Physics;
+namespace Mycelia;
 
 public struct AABB
 {

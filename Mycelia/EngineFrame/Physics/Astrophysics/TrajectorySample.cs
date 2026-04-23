@@ -1,5 +1,5 @@
 
-namespace Mycelia;
+namespace Mycelia.Astrophysics;
 
 public class TrajectorySample
 {

@@ -1,4 +1,4 @@
-namespace Mycelia;
+namespace Mycelia.Astrophysics;
 
 public static class WorldConstants
 {

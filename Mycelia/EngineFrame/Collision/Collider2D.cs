@@ -22,7 +22,7 @@ public class Collider2D
         this.owner = owner;
         this.shape = shape;
         this.scale = scale;
-        this.offset = offset; 
+        this.offset = offset;
         radius = scale.x > scale.y ? scale.x / 2 : scale.y / 2;
         switch (shape)
         {
@@ -36,6 +36,10 @@ public class Collider2D
                 //TODO:暂不支持其他形状
                 break;
         }
+        
+        OnEnter = onEnter;
+        OnStay = onStay;
+        OnExit = onExit;
     }
     
     // 碰撞事件

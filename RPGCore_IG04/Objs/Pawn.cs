@@ -1,4 +1,6 @@
-namespace Mycelia;
+using Mycelia;
+
+namespace RPGCore_IG04;
 
 public class Pawn : UObj
 {

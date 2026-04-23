@@ -24,6 +24,6 @@ public class CameraStand
 
     public void SetCameraStandState(CameraStand stand,ref WorldState state)
     {
-        state.cameraStand = stand;
+        state.viewportState.mainCameraStand = stand;
     }
 }

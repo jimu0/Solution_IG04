@@ -2,19 +2,19 @@
 
 namespace Mycelia;
 
-internal class Pulse
+public class Pulse
 {
     private readonly List<ScheduledNode> _queue = new();
     private double _currentTime;
 
-    internal void Start(double dt, IPulseNode root)
+    public void Start(double dt, IPulseNode root)
     {
         _currentTime = 0;
         _queue.Clear();
         AddScheduledNode(dt,root);
     }
 
-    internal void Step(double dt, Energy context)
+    public void Step(double dt, Energy context)
     {
         _currentTime += dt;
         for (int i = _queue.Count - 1; i >= 0; i--)

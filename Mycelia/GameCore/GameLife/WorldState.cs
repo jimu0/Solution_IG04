@@ -48,7 +48,7 @@ public struct WorldState
     {
         public int id;
         public float height;
-        public TileFlags flags;
+        public bool isBlocked;
     }
     /// <summary>
     /// 新增扩展类状态
@@ -62,11 +62,11 @@ public struct WorldState
     public unitState[] unitStates;
     public PawnState[] pawnStates;
     public PawnState[] roleStates;
-    
-    public CameraStand cameraStand;
-    
-    
-    
 
-    
+    public ViewportState viewportState;
+
+
+
+
+
 }

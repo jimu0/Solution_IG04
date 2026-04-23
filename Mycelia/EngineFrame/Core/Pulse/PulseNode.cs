@@ -1,11 +1,11 @@
 namespace Mycelia;
 
-internal sealed class ScheduledNode
+public sealed class ScheduledNode
 {
-    internal IPulseNode Node;
-    internal double ExecuteAtTime;
+    public IPulseNode Node;
+    public double ExecuteAtTime;
 
-    internal ScheduledNode(IPulseNode node, double executeAtTime)
+    public ScheduledNode(IPulseNode node, double executeAtTime)
     {
         Node = node;
         ExecuteAtTime = executeAtTime;

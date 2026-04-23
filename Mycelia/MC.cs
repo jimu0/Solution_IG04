@@ -20,14 +20,12 @@ public struct MC
     public static void Simulate_Start() => GameManager.Start();
     public static void Simulate_Update() => GameManager.Tick();
     
-    
-    //public static WorldState GetWorldState => GameManager.GetWorldState();
 
     public static void TimeTick() => WTime.Advance();
 
-    public static void InitTables(IConfigService cfgService) => Config.InitTables(cfgService);
-    public static UnitConfig GetUnitConfig(int id) => Config.GetUnitConfig(id);
-    public static CardConfig GetCardConfig(int id) => Config.GetCardConfig(id);
+    //public static void InitTables(IConfigService cfgService) => Config.InitTables(cfgService);
+    //public static UnitConfig GetUnitConfig(int id) => Config.GetUnitConfig(id);
+    //public static CardConfig GetCardConfig(int id) => Config.GetCardConfig(id);
 
     //public void Render() { }
 }

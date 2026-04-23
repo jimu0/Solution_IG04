@@ -1,4 +1,5 @@
 ﻿using Mycelia;
+using RPGCore_IG04;
 
 namespace IGC.RPGCore_IG04;
 

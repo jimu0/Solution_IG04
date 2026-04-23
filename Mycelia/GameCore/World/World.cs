@@ -1,6 +1,6 @@
 
 
-namespace Mycelia;
+namespace Mycelia.World;
 
 internal sealed class World : Un
 {
@@ -89,7 +89,7 @@ internal sealed class World : Un
             Tile tile = tiles[i];
             state.tiles[i].id = tile.id;
             state.tiles[i].height = tile.height;
-            state.tiles[i].flags = tile.flags;
+            state.tiles[i].isBlocked = tile.IsBlocked;
         }
     }
 }

@@ -174,8 +174,8 @@ public class CollisionDetector
 
 public class CollisionInfo
 {
-    public Rigidbody2D BodyA { get; set; }
-    public Rigidbody2D BodyB { get; set; }
+    public Rigidbody2D? BodyA { get; set; }
+    public Rigidbody2D? BodyB { get; set; }
     public Vec2 Normal { get; set; } // 碰撞法线
     public float Depth { get; set; } // 穿透深度
 }

@@ -1,7 +1,13 @@
 namespace Mycelia;
 
-public struct StateFrame
+internal struct StateFrame
 {
-    public int Frame;
-    public byte[] Payload;
+    internal int Frame;
+    internal byte[] Payload;
+
+    public StateFrame(int frame, byte[] payload)
+    {
+        Frame = frame;
+        Payload = payload;
+    }
 }
