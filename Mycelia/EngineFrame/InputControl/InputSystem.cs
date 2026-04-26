@@ -31,6 +31,15 @@ public static class InputSystem
     {
         _working.pawnInputs[n].jumpHeld = held;
     }
+    internal static void SetUsePressed(int n, bool pressed)
+    {
+        _working.pawnInputs[n].usePressed = pressed;
+    }
+
+    internal static void SetUseHeld(int n, bool held)
+    {
+        _working.pawnInputs[n].useHeld = held;
+    }
 
     internal static void SetAim(int n, float x, float y)
     {

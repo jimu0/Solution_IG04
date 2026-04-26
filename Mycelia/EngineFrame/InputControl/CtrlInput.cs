@@ -21,6 +21,8 @@ public class CtrlInput
                 move = Vec3.Zero,
                 jumpPressed = false,
                 jumpHeld = false,
+                usePressed = false,
+                useHeld = false,
                 aim = Vec3.Zero,
                 aiming = false,
                 action = ActionBits.None
@@ -35,6 +37,8 @@ public struct PawnInput
     public Vec3 move;
     public bool jumpPressed;
     public bool jumpHeld;
+    public bool usePressed;
+    public bool useHeld;
     public Vec3 aim;
     public bool aiming;
     public ActionBits action;

@@ -9,6 +9,8 @@ public struct MC
         public static void SetMove(int n, float x, float y) => InputSystem.SetMove(n, x, y);
         public static void SetJump(int n, bool pressed) => InputSystem.SetJumpPressed(n, pressed);
         public static void SetJumpHeld(int n, bool held) => InputSystem.SetJumpHeld(n, held);
+        public static void SetUse(int n, bool pressed) => InputSystem.SetUsePressed(n, pressed);
+        public static void SetUseHeld(int n, bool held) => InputSystem.SetUseHeld(n, held);
         public static void SetAim(int n, float x, float y) => InputSystem.SetAim(n, x, y);
         public static void Press(int n, ActionBits action) => InputSystem.Press(n, action);
         public static void Release(int n, ActionBits action) => InputSystem.Release(n, action);
