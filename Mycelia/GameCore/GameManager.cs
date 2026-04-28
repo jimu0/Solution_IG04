@@ -35,10 +35,10 @@ internal static class GameManager
 
     //internal static void End()=>
     //internal static WorldState GetWorldState() => Simulate.GetWorldState();
-    
-    // internal static void RegisterSim(ISim sim) { listSimSys.Add(sim); }
-    // internal static void UnregisterSim(ISim sim) { listSimSys.Remove(sim); }
-    // internal static void RegisterRender(IRender render) { listRenderSys.Add(render); }
-    // internal static void UnregisterRender(IRender render) { listRenderSys.Remove(render); }
-    
+
+    internal static void RegisterSim(ISim sim) => Simulate.Register(sim);
+    internal static void UnRegisterSim(ISim sim) => Simulate.UnRegister(sim);
+    internal static void RegisterRender(IRender render) => Render.Register(render);
+    internal static void UnRegisterRender(IRender render) => Render.UnRegister(render);
+
 }

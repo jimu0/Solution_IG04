@@ -8,6 +8,7 @@ public struct WorldState
     public double tick;
     public string debugText;
 
+    public int currentWorldId;
     public int worldWidth;
     public int worldHeight;
     public TileState[] tiles;

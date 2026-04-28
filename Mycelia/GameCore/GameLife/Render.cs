@@ -25,12 +25,18 @@ internal static class Render
     }
     
     
-    private static void Register(IRender? sys)
+    internal static void Register(IRender? sys)
     {
         if (sys == null) return;
         _systems.Add(sys);
     }
 
+    internal static void UnRegister(IRender? sys)
+    {
+        if (sys == null) return;
+        _systems.Remove(sys);
+    }
+    
     private static void BatchRegister(IReadOnlyList<IRender> systems)
     {
         foreach (IRender t in systems)
@@ -38,4 +44,6 @@ internal static class Render
             Register(t);
         }
     }
+    
+    
 }

@@ -25,6 +25,11 @@ public struct MC
 
     public static void TimeTick() => WTime.Advance();
 
+
+    public static void RegisterSim(ISim isim) => GameManager.RegisterSim(isim);
+    public static void UnRegisterSim(ISim isim) => GameManager.UnRegisterSim(isim);
+    public static void RegisterRender(IRender irender) => GameManager.RegisterRender(irender);
+    public static void UnRegisterRender(IRender irender) => GameManager.UnRegisterRender(irender);
     //public static void InitTables(IConfigService cfgService) => Config.InitTables(cfgService);
     //public static UnitConfig GetUnitConfig(int id) => Config.GetUnitConfig(id);
     //public static CardConfig GetCardConfig(int id) => Config.GetCardConfig(id);

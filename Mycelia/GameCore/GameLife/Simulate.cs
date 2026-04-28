@@ -59,7 +59,7 @@ internal static class Simulate
         foreach (var sys in list) sys.OnSimStep(ctrlInput, ref _state);
     }
 
-    private static void Register(ISim? sys)
+    internal static void Register(ISim? sys)
     {
         if (sys == null) return;
 
@@ -73,7 +73,27 @@ internal static class Simulate
 
         list.Add(sys);
     }
+    
+    internal static void UnRegister(ISim? sys)
+    {
+        if (sys == null) return;
 
+        // 从总列表移除
+        _systems.Remove(sys);
+
+        // 从分组中移除
+        if (_byPhase.TryGetValue(sys.Phase, out List<ISim>? list))
+        {
+            list.Remove(sys);
+
+            // 如果该 Phase 已空，顺手清掉（防止脏数据）
+            if (list.Count == 0)
+            {
+                _byPhase.Remove(sys.Phase);
+            }
+        }
+    }
+    
     private static void BatchRegister(IReadOnlyList<ISim> systems)
     {
         foreach (ISim t in systems)
